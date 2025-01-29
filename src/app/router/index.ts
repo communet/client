@@ -6,8 +6,13 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('@pages/HomePage.vue'),
+      component: () => import('@/pages/home-page.vue'),
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      redirect: '/'
+    }
   ],
 });
 

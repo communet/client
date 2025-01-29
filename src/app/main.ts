@@ -3,20 +3,12 @@ import '@app/styles/main.scss';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 
-import Aura from '@primevue/themes/aura';
-import PrimeVue from 'primevue/config';
-
-import App from '@app/App.vue';
+import ConfigProvider from '@app/config-provider.vue';
 import router from '@app/router';
 
-const app = createApp(App);
+const app = createApp(ConfigProvider);
 
 app.use(createPinia());
 app.use(router);
-app.use(PrimeVue, {
-  theme: {
-    preset: Aura,
-  },
-});
 
 app.mount('#app');

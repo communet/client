@@ -1,6 +1,4 @@
-import pluginVitest from '@vitest/eslint-plugin';
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting';
-import vueTsEslintConfig from '@vue/eslint-config-typescript';
 import eslintPluginNoRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 import pluginVue from 'eslint-plugin-vue';
 
@@ -32,17 +30,12 @@ export default [
       '**/dist/**',
       '**/dist-ssr/**',
       '**/coverage/**',
-      '**/src-tauri/**',
-      '**/nightwatch.d.ts',
     ],
   },
 
   ...pluginVue.configs['flat/essential'],
-  ...vueTsEslintConfig(),
+  ...defineConfigWithVueTs(),
+  ...vueTsConfigs(),
 
-  {
-    ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*'],
-  },
   skipFormatting,
 ];

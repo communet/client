@@ -1,16 +1,17 @@
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting';
-import eslintPluginNoRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
+import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 import pluginVue from 'eslint-plugin-vue';
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript';
 
 export default [
   {
     name: 'app/files-to-lint',
     files: ['**/*.{ts,mts,tsx,vue}'],
-    plugins: { eslintPluginNoRelativeImportPaths },
+    plugins: { 'no-relative-import-paths': noRelativeImportPaths, },
     rules: {
-      'eslintPluginNoRelativeImportPaths/no-relative-import-paths': [
+      'no-relative-import-paths/no-relative-import-paths': [
         'error',
-        { rootDir: 'src', prefix: '@' },
+        { rootDir: 'src', prefix: '@', allowSameFolder: false },
       ],
       'no-return-await': 'error',
       'no-async-promise-executor': 'error',
@@ -33,9 +34,10 @@ export default [
     ],
   },
 
-  ...pluginVue.configs['flat/essential'],
-  ...defineConfigWithVueTs(),
-  ...vueTsConfigs(),
+  ...defineConfigWithVueTs(
+    pluginVue.configs['flat/essential'],
+    vueTsConfigs.recommended
+  ),
 
   skipFormatting,
 ];

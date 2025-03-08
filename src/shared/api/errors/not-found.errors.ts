@@ -1,4 +1,4 @@
-import { ServerError } from './server.error';
+import { ServerError } from '@/shared/api/errors/server.error';
 
 export class NotFoundError extends ServerError {
   constructor(message: string) {

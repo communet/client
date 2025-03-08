@@ -1,6 +1,6 @@
-import { AuthoredApi } from "../authored/authored.api";
-import type { UserDto } from "./schemas/dtos";
-import { UserSchema } from "./schemas/dtos";
+import { AuthoredApi } from "@/shared/api/authored/authored.api";
+import type { UserDto } from "@/shared/api/user/schemas/dtos";
+import { UserSchema } from "@/shared/api/user/schemas/dtos";
 
 const PATHS = {
   ME: '/user/me',

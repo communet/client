@@ -1,11 +1,11 @@
+import { BadRequestError } from '@/shared/api/errors/bad-request.error';
+import { ForbiddenError } from '@/shared/api/errors/forbidden.error';
+import { InternalServerError } from '@/shared/api/errors/internal.error';
+import { NotFoundError } from '@/shared/api/errors/not-found.errors';
+import { ServerError } from '@/shared/api/errors/server.error';
+import { UnauthorizedError } from '@/shared/api/errors/unauthorized.error';
+import { NetworkError } from '@/shared/errors/network.error';
 import { type SafeParseReturnType, type ZodSchema } from 'zod';
-import { ServerError } from './errors/server.error';
-import { NetworkError } from '../errors/network.error';
-import { InternalServerError } from './errors/internal.error';
-import { ForbiddenError } from './errors/forbidden.error';
-import { UnauthorizedError } from './errors/unauthorized.error';
-import { NotFoundError } from './errors/not-found.errors';
-import { BadRequestError } from './errors/bad-request.error';
 
 export class Api {
   constructor(private readonly apiUrl: string) {}
@@ -20,7 +20,7 @@ export class Api {
 
     try {
       response = await fetch(url, options);
-    } catch (error) {
+    } catch {
       throw new NetworkError('Network error');
     }
 

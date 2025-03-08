@@ -1,7 +1,7 @@
 import { type SafeParseReturnType, type ZodSchema } from 'zod';
-import { Api } from '../base.api';
-import type { LoginDto, LogoutDto, RefreshTokensDto } from './schemas/dtos';
-import { LoginSchema, LogoutSchema, RefreshTokensSchema } from './schemas/dtos';
+import { Api } from '@/shared/api/base.api';
+import type { LoginDto, LogoutDto, RefreshTokensDto } from '@/shared/api/authored/schemas/dtos';
+import { LoginSchema, LogoutSchema, RefreshTokensSchema } from '@/shared/api/authored/schemas/dtos';
 
 const PATHS = {
   REFRESH_TOKENS: '/auth/refresh-tokens',

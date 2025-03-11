@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 export const RefreshTokensSchema = z.object({
-  accessToken: z.string().jwt(),
+  accessToken: z.string(),
   expiresAt: z.number().int().positive(),
 });
 
 export type RefreshTokensDto = z.infer<typeof RefreshTokensSchema>;
 
 export const LoginSchema = z.object({
-  accessToken: z.string().jwt(),
+  accessToken: z.string(),
   expiresAt: z.number().int().positive(),
 });
 

@@ -1,19 +1,43 @@
-import type { FormInst } from 'naive-ui';
+import { useAsyncValidator } from '@shared/ui/naive-ui/zod-integration/form-validation.integration';
+import {
+  EmailValidator,
+  PasswordValidator,
+  UsernameValidator,
+} from '@shared/validators/user-data.validators';
+import type { FormItemInst, FormRules } from 'naive-ui';
 import { ref } from 'vue';
 
 export const useFormModel = () => {
-  const reference = ref<FormInst | null>(null);
+  const PASSWORD_INPUT_TRIGGER = 'password-input';
+  const confirmRef = ref<FormItemInst | undefined>(undefined);
   const model = ref({
     username: '',
     email: '',
-    password: {
-      base: '',
-      repeated: '',
-    },
+    password: '',
+    confirm: '',
   });
-  const rules = {
-    username: {},
+  const rules: FormRules = {
+    username: {
+      asyncValidator: useAsyncValidator(UsernameValidator),
+      trigger: 'input',
+    },
+    email: {
+      asyncValidator: useAsyncValidator(EmailValidator),
+      trigger: 'input',
+    },
+    password: {
+      asyncValidator: useAsyncValidator(PasswordValidator),
+      trigger: 'input',
+    },
+    confirm: {
+      asyncValidator: async (_item, value) => {
+        if (value !== model.value.password) {
+          throw new Error('Password is not same as re-entered password!');
+        }
+      },
+      trigger: ['input', PASSWORD_INPUT_TRIGGER],
+    },
   };
 
-  return { reference, model, rules };
+  return { confirmRef, PASSWORD_INPUT_TRIGGER, model, rules };
 };

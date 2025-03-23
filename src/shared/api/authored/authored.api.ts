@@ -1,10 +1,10 @@
 import { type SafeParseReturnType, type ZodSchema } from 'zod';
-import { Api } from '@/shared/api/base.api';
-import type { LoginDto, LogoutDto, RefreshTokensDto } from '@/shared/api/authored/schemas/dtos';
-import { LoginSchema, LogoutSchema, RefreshTokensSchema } from '@/shared/api/authored/schemas/dtos';
+import { Api } from '@shared/api/base.api';
+import type { LogoutResponse, TokensResponse } from '@shared/api/authored/schemas/dtos';
+import { LogoutResponseSchema, TokensResponseSchema } from '@shared/api/authored/schemas/dtos';
 
 const PATHS = {
-  REFRESH_TOKENS: '/auth/refresh-tokens',
+  REFRESH_TOKENS: '/auth/refresh',
   LOGIN: '/auth/login',
   LOGOUT: '/auth/logout',
   REGISTER: '/auth/register',
@@ -21,19 +21,19 @@ export class AuthoredApi extends Api {
     super(apiUrl);
   }
 
-  protected async refreshTokens() {
-    const response = await this.post<RefreshTokensDto>(PATHS.REFRESH_TOKENS, RefreshTokensSchema);
+  protected async refresh() {
+    const response = await this.post<TokensResponse>(PATHS.REFRESH_TOKENS, TokensResponseSchema);
 
     if (response.success) {
-      this.token = response.data.accessToken;
-      this.expiresAt = response.data.expiresAt;
+      this.token = response.data.access_token;
+      this.expiresAt = response.data.access_expires;
     }
   }
 
   public async login(email: string, password: string) {
-    const response = await this.request<LoginDto>(
+    const response = await this.request<TokensResponse>(
       PATHS.LOGIN,
-      LoginSchema,
+      TokensResponseSchema,
       {
         method: 'POST',
         body: JSON.stringify({ email, password }),
@@ -42,8 +42,8 @@ export class AuthoredApi extends Api {
     );
 
     if (response.success) {
-      this.token = response.data.accessToken;
-      this.expiresAt = response.data.expiresAt;
+      this.token = response.data.access_token;
+      this.expiresAt = response.data.access_expires;
     }
   }
 
@@ -55,11 +55,11 @@ export class AuthoredApi extends Api {
   ): Promise<SafeParseReturnType<unknown, T>> {
     if (!skipAuth) {
       if (!this.expiresAt) {
-        await this.refreshTokens();
+        await this.refresh();
       }
 
       if (this.expiresAt && Date.now() > this.expiresAt) {
-        await this.refreshTokens();
+        await this.refresh();
       }
 
       if (this.token && this.expiresAt && Date.now() < this.expiresAt) {
@@ -77,6 +77,6 @@ export class AuthoredApi extends Api {
   }
 
   public async logout() {
-    await this.post<LogoutDto>(PATHS.LOGOUT, LogoutSchema);
+    await this.post<LogoutResponse>(PATHS.LOGOUT, LogoutResponseSchema);
   }
 }

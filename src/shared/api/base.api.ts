@@ -7,7 +7,7 @@ import { UnauthorizedError } from '@/shared/api/errors/unauthorized.error';
 import { NetworkError } from '@/shared/errors/network.error';
 import { type SafeParseReturnType, type ZodSchema } from 'zod';
 
-export class Api {
+export abstract class Api {
   constructor(private readonly apiUrl: string) {}
 
   protected async request<T>(

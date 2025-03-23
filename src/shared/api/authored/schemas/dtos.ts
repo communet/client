@@ -1,19 +1,16 @@
 import { z } from 'zod';
 
-export const RefreshTokensSchema = z.object({
-  accessToken: z.string(),
-  expiresAt: z.number().int().positive(),
+export const TokensResponseSchema = z.object({
+  access_token: z.string(),
+  access_expires: z
+    .string()
+    .datetime()
+    .transform((value) => new Date(value).getTime())
+    .refine((value) => Date.now() < value),
 });
 
-export type RefreshTokensDto = z.infer<typeof RefreshTokensSchema>;
+export type TokensResponse = z.infer<typeof TokensResponseSchema>;
 
-export const LoginSchema = z.object({
-  accessToken: z.string(),
-  expiresAt: z.number().int().positive(),
-});
+export const LogoutResponseSchema = z.undefined();
 
-export type LoginDto = z.infer<typeof LoginSchema>;
-
-export const LogoutSchema = z.undefined();
-
-export type LogoutDto = z.infer<typeof LogoutSchema>;
+export type LogoutResponse = z.infer<typeof LogoutResponseSchema>;

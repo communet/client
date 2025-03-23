@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import '@app/styles/main.scss';
 
 import { createPinia } from 'pinia';

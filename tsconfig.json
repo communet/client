@@ -1,7 +1,9 @@
 {
   "files": [],
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "references": [
     {

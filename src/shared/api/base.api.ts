@@ -5,33 +5,76 @@ import { NotFoundError } from '@/shared/api/errors/not-found.errors';
 import { ServerError } from '@/shared/api/errors/server.error';
 import { UnauthorizedError } from '@/shared/api/errors/unauthorized.error';
 import { NetworkError } from '@/shared/errors/network.error';
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
+import { Service } from 'typedi';
 import { type SafeParseReturnType, type ZodSchema } from 'zod';
+import { Config } from '@/shared/config/config';
 
-export abstract class Api {
-  constructor(private readonly apiUrl: string) {}
-
-  protected async request<T>(
+export abstract class IApi {
+  abstract request<T, D>(
     path: string,
     zodSchema: ZodSchema,
-    options?: RequestInit,
+    config?: AxiosRequestConfig<D>,
+    skipAuth?: boolean,
+  ): Promise<SafeParseReturnType<unknown, T>>;
+
+  abstract get<T>(
+    path: string,
+    zodSchema: ZodSchema,
+    options?: Omit<AxiosRequestConfig<T>, 'method'>,
+  ): Promise<SafeParseReturnType<unknown, T>>;
+
+  abstract post<T>(
+    path: string,
+    zodSchema: ZodSchema,
+    options?: Omit<AxiosRequestConfig<T>, 'method'>,
+  ): Promise<SafeParseReturnType<unknown, T>>;
+
+  abstract put<T>(
+    path: string,
+    zodSchema: ZodSchema,
+    options?: Omit<AxiosRequestConfig<T>, 'method'>,
+  ): Promise<SafeParseReturnType<unknown, T>>;
+
+  abstract delete<T>(
+    path: string,
+    zodSchema: ZodSchema,
+    options?: Omit<AxiosRequestConfig<T>, 'method'>,
+  ): Promise<SafeParseReturnType<unknown, T>>;
+}
+
+const ax: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+});
+
+console.log(ax.defaults);
+
+@Service()
+export class Api implements IApi {
+  private readonly axios: AxiosInstance = axios.create({
+    baseURL: Config.apiUrl,
+  });
+
+  async request<T>(
+    path: string,
+    zodSchema: ZodSchema,
+    config?: AxiosRequestConfig,
   ): Promise<SafeParseReturnType<unknown, T>> {
-    let response: Response;
-    const url = new URL(path, this.apiUrl);
+    let response: AxiosResponse<T>;
 
     try {
-      response = await fetch(url, options);
-    } catch {
+      response = await this.axios<T>({ url: path, ...config });
+    } catch (err) {
+      this.handleErrors(err as AxiosResponse);
       throw new NetworkError('Network error');
     }
 
     this.handleErrors(response);
 
-    const data = await response.json();
-
-    return zodSchema.safeParseAsync(data);
+    return zodSchema.safeParseAsync(response.data);
   }
 
-  private handleErrors(response: Response) {
+  private handleErrors(response: AxiosResponse) {
     switch (response.status) {
       case 400:
         throw new BadRequestError('Bad request');
@@ -48,34 +91,34 @@ export abstract class Api {
     }
   }
 
-  protected async get<T>(
+  async get<T>(
     path: string,
     zodSchema: ZodSchema,
-    options?: RequestInit,
+    options?: Omit<AxiosRequestConfig, 'method'>,
   ): Promise<SafeParseReturnType<unknown, T>> {
     return this.request(path, zodSchema, { ...options, method: 'GET' });
   }
 
-  protected async post<T>(
+  async post<T>(
     path: string,
     zodSchema: ZodSchema,
-    options?: RequestInit,
+    options?: Omit<AxiosRequestConfig, 'method'>,
   ): Promise<SafeParseReturnType<unknown, T>> {
     return this.request(path, zodSchema, { ...options, method: 'POST' });
   }
 
-  protected async put<T>(
+  async put<T>(
     path: string,
     zodSchema: ZodSchema,
-    options?: RequestInit,
+    options?: Omit<AxiosRequestConfig, 'method'>,
   ): Promise<SafeParseReturnType<unknown, T>> {
     return this.request(path, zodSchema, { ...options, method: 'PUT' });
   }
 
-  protected async delete<T>(
+  async delete<T>(
     path: string,
     zodSchema: ZodSchema,
-    options?: RequestInit,
+    options?: Omit<AxiosRequestConfig, 'method'>,
   ): Promise<SafeParseReturnType<unknown, T>> {
     return this.request(path, zodSchema, { ...options, method: 'DELETE' });
   }

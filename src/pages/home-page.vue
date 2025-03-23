@@ -1,5 +1,11 @@
 <script setup lang="ts">
+// import { AuthoredApi } from '@/shared/api/authored/authored.api';
 import { NFlex, NImage, NText } from 'naive-ui';
+// import Container from 'typedi';
+
+// const authApi = Container.get(AuthoredApi);
+
+// authApi.login('user@example.com', 'bebrovich@');
 </script>
 
 <template>

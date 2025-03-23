@@ -2,23 +2,26 @@ import { type SafeParseReturnType, type ZodSchema } from 'zod';
 import { Api } from '@shared/api/base.api';
 import type { LogoutResponse, TokensResponse } from '@shared/api/authored/schemas/dtos';
 import { LogoutResponseSchema, TokensResponseSchema } from '@shared/api/authored/schemas/dtos';
+import { Service } from 'typedi';
+import type { AxiosRequestConfig } from 'axios';
 
 const PATHS = {
-  REFRESH_TOKENS: '/auth/refresh',
-  LOGIN: '/auth/login',
-  LOGOUT: '/auth/logout',
-  REGISTER: '/auth/register',
-  FORGOT_PASSWORD: '/auth/forgot-password',
-  RESET_PASSWORD: '/auth/reset-password',
-  VERIFY_EMAIL: '/auth/verify-email',
+  REFRESH_TOKENS: 'auth/refresh',
+  LOGIN: 'auth/login',
+  LOGOUT: 'auth/logout',
+  REGISTER: 'auth/register',
+  FORGOT_PASSWORD: 'auth/forgot-password',
+  RESET_PASSWORD: 'auth/reset-password',
+  VERIFY_EMAIL: 'auth/verify-email',
 } as const;
 
+@Service()
 export class AuthoredApi extends Api {
   private token: string | null = null;
   private expiresAt: number | null = null;
 
-  constructor(apiUrl: string) {
-    super(apiUrl);
+  constructor() {
+    super();
   }
 
   protected async refresh() {
@@ -36,7 +39,7 @@ export class AuthoredApi extends Api {
       TokensResponseSchema,
       {
         method: 'POST',
-        body: JSON.stringify({ email, password }),
+        data: { email, password },
       },
       true,
     );
@@ -50,7 +53,7 @@ export class AuthoredApi extends Api {
   override async request<T>(
     path: string,
     zodSchema: ZodSchema,
-    options?: RequestInit,
+    config?: AxiosRequestConfig,
     skipAuth: boolean = false,
   ): Promise<SafeParseReturnType<unknown, T>> {
     if (!skipAuth) {
@@ -63,17 +66,21 @@ export class AuthoredApi extends Api {
       }
 
       if (this.token && this.expiresAt && Date.now() < this.expiresAt) {
-        options = {
-          ...options,
+        config = {
+          ...config,
           headers: {
-            ...options?.headers,
+            ...config?.headers,
             Authorization: `Bearer ${this.token}`,
           },
         };
       }
     }
 
-    return super.request<T>(path, zodSchema, options);
+    // eslint-disable-next-line
+    // @ts-ignore
+    console.log(this.axios.getUri(config));
+
+    return super.request<T>(path, zodSchema, config);
   }
 
   public async logout() {

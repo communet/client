@@ -14,3 +14,5 @@ export const EmailValidator = z.string().trim().email();
 export const PasswordValidator = z
   .string()
   .min(8, 'Password must be greater or equal 8 characters');
+
+export const EmailOrUsernameValidator = z.union([UsernameValidator, EmailValidator]);

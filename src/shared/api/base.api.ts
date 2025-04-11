@@ -43,16 +43,11 @@ export abstract class IApi {
   ): Promise<SafeParseReturnType<unknown, T>>;
 }
 
-const ax: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-});
-
-console.log(ax.defaults);
-
 @Service()
 export class Api implements IApi {
   private readonly axios: AxiosInstance = axios.create({
     baseURL: Config.apiUrl,
+    withCredentials: true,
   });
 
   async request<T>(
@@ -77,17 +72,17 @@ export class Api implements IApi {
   private handleErrors(response: AxiosResponse) {
     switch (response.status) {
       case 400:
-        throw new BadRequestError('Bad request');
+        throw new BadRequestError(response.data.message || 'Bad request');
       case 401:
-        throw new UnauthorizedError('Unauthorized');
+        throw new UnauthorizedError(response.data.message || 'Unauthorized');
       case 403:
-        throw new ForbiddenError('Forbidden');
+        throw new ForbiddenError(response.data.message || 'Forbidden');
       case 404:
-        throw new NotFoundError('Not found');
+        throw new NotFoundError(response.data.message || 'Not found');
       case 500:
-        throw new InternalServerError('Internal server error');
+        throw new InternalServerError(response.data.message || 'Internal server error');
       default:
-        throw new ServerError('Server error');
+        throw new ServerError(response.data.message || 'Server error');
     }
   }
 

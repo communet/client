@@ -24,6 +24,23 @@ export class AuthoredApi extends Api {
     super();
   }
 
+  public async register(email: string, password: string, username: string) {
+    const response = await this.request<TokensResponse>(
+      PATHS.REGISTER,
+      TokensResponseSchema,
+      {
+        method: 'POST',
+        data: { email, password, username },
+      },
+      true,
+    );
+
+    if (response.success) {
+      this.token = response.data.access_token;
+      this.expiresAt = response.data.access_expires;
+    }
+  }
+
   protected async refresh() {
     const response = await this.post<TokensResponse>(PATHS.REFRESH_TOKENS, TokensResponseSchema);
 

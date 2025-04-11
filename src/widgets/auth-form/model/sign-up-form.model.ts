@@ -4,12 +4,13 @@ import {
   PasswordValidator,
   UsernameValidator,
 } from '@shared/validators/user-data.validators';
-import type { FormItemInst, FormRules } from 'naive-ui';
+import { type FormInst, type FormItemInst, type FormRules } from 'naive-ui';
 import { ref } from 'vue';
 
-export const useFormModel = () => {
+export const useSignUpFormModel = () => {
   const PASSWORD_INPUT_TRIGGER = 'password-input';
   const confirmRef = ref<FormItemInst | undefined>(undefined);
+  const formRef = ref<FormInst | undefined>(undefined);
   const model = ref({
     username: '',
     email: '',
@@ -39,5 +40,5 @@ export const useFormModel = () => {
     },
   };
 
-  return { confirmRef, PASSWORD_INPUT_TRIGGER, model, rules };
+  return { confirmRef, PASSWORD_INPUT_TRIGGER, model, rules, formRef };
 };

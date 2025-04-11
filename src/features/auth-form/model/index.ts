@@ -1,4 +1,4 @@
-import { useFormModel } from '@features/sign-up/model/form.model';
+import { useFormModel } from '@/features/auth-form/model/form.model';
 
 export const useSignUpModel = () => {
   const formModel = useFormModel();

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSignUpModel } from '@/features/sign-up/model';
+import { useSignUpModel } from '@/features/auth-form/model';
 import { NForm, NFormItem, NInput } from 'naive-ui';
 
 const {

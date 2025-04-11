@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SignUp from '@features/sign-up/ui/sign-up.vue';
+import SignUp from '@features/auth-form/ui/sign-up.vue';
 import { NButton, NCard, NFlex } from 'naive-ui';
 </script>
 

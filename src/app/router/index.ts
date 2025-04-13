@@ -19,6 +19,7 @@ const router = createRouter({
       component: () => import('@/pages/auth-page/ui/auth-page.vue'),
       meta: {
         requiresAuth: false,
+        requiresUnauth: true,
       },
     },
     {
@@ -29,11 +30,23 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to) => {
-  if (to.meta.requiresAuth) {
-    const api = Container.get(AuthoredApi);
+router.beforeEach(async (to) => {
+  const api = Container.get(AuthoredApi);
 
-    if (!api.isLoggedIn) return 'auth';
+  if (!api.isLoggedIn) {
+    try {
+      await api.refresh();
+    } catch {}
+  }
+
+  if (to.meta.requiresAuth) {
+    if (!api.isLoggedIn) {
+      return 'auth';
+    }
+  } else if (to.meta.requiresUnauth) {
+    if (api.isLoggedIn) {
+      return 'home';
+    }
   }
 });
 

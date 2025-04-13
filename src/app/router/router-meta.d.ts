@@ -6,5 +6,6 @@ export {};
 declare module 'vue-router' {
   interface RouteMeta {
     requiresAuth: boolean;
+    requiresUnauth?: boolean;
   }
 }

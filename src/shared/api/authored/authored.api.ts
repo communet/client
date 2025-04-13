@@ -18,15 +18,15 @@ const PATHS = {
 
 @Service()
 export class AuthoredApi extends Api {
-  private token: string | null = null;
-  private expiresAt: number | null = null;
+  private token?: string;
+  private expiresAt?: number;
 
   constructor() {
     super();
   }
 
   public get isLoggedIn() {
-    return this.token && this.expiresAt && Date.now() < this.expiresAt;
+    return !!this.token && !!this.expiresAt && Date.now() < this.expiresAt;
   }
 
   public async register(email: string, password: string, username: string) {
@@ -41,17 +41,22 @@ export class AuthoredApi extends Api {
     );
 
     if (response.success) {
-      this.token = response.data.access_token;
-      this.expiresAt = response.data.access_expires;
+      this._setTokenData(response.data);
     }
   }
 
-  protected async refresh() {
-    const response = await this.post<TokensResponse>(PATHS.REFRESH_TOKENS, TokensResponseSchema);
+  public async refresh() {
+    const response = await this.request<TokensResponse>(
+      PATHS.REFRESH_TOKENS,
+      TokensResponseSchema,
+      {
+        method: 'POST',
+      },
+      true,
+    );
 
     if (response.success) {
-      this.token = response.data.access_token;
-      this.expiresAt = response.data.access_expires;
+      this._setTokenData(response.data);
     }
   }
 
@@ -71,9 +76,15 @@ export class AuthoredApi extends Api {
     );
 
     if (response.success) {
-      this.token = response.data.access_token;
-      this.expiresAt = response.data.access_expires;
+      this._setTokenData(response.data);
     }
+  }
+
+  private _setTokenData(
+    token: TokensResponse | { access_token?: undefined; access_expires?: undefined },
+  ) {
+    this.token = token.access_token;
+    this.expiresAt = token.access_expires;
   }
 
   override async request<T>(
@@ -106,6 +117,10 @@ export class AuthoredApi extends Api {
   }
 
   public async logout() {
-    await this.post<LogoutResponse>(PATHS.LOGOUT, LogoutResponseSchema);
+    const response = await this.post<LogoutResponse>(PATHS.LOGOUT, LogoutResponseSchema);
+
+    if (response.success) {
+      this._setTokenData({});
+    }
   }
 }

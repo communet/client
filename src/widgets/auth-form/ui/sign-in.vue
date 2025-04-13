@@ -11,7 +11,7 @@ const {
 const onSignInButtonClick = async () => {
   const validationResult = await formRef.value?.validate();
 
-  if (validationResult) {
+  if (validationResult?.warnings) {
     return;
   }
 
@@ -32,7 +32,7 @@ const onSignInButtonClick = async () => {
         :input-props="{
           autocomplete: 'no-autofill-please',
         }"
-        placeholder="Enter email"
+        placeholder="Enter email or username"
       />
     </n-form-item>
 

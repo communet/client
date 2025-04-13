@@ -5,7 +5,7 @@ import { NotFoundError } from '@/shared/api/errors/not-found.errors';
 import { ServerError } from '@/shared/api/errors/server.error';
 import { UnauthorizedError } from '@/shared/api/errors/unauthorized.error';
 import { NetworkError } from '@/shared/errors/network.error';
-import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
+import axios, { AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import { Service } from 'typedi';
 import { type SafeParseReturnType, type ZodSchema } from 'zod';
 import { Config } from '@/shared/config/config';
@@ -60,11 +60,12 @@ export class Api implements IApi {
     try {
       response = await this.axios<T>({ url: path, ...config });
     } catch (err) {
-      this.handleErrors(err as AxiosResponse);
+      if (err instanceof AxiosError && err.response) {
+        this.handleErrors(err.response);
+      }
+
       throw new NetworkError('Network error');
     }
-
-    this.handleErrors(response);
 
     return zodSchema.safeParseAsync(response.data);
   }

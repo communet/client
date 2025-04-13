@@ -1,3 +1,4 @@
+import type { LoginDto } from '@/shared/api/authored/dto';
 import type { LogoutResponse, TokensResponse } from '@shared/api/authored/schemas/dtos';
 import { LogoutResponseSchema, TokensResponseSchema } from '@shared/api/authored/schemas/dtos';
 import { Api } from '@shared/api/base.api';
@@ -29,27 +30,15 @@ export class AuthoredApi extends Api {
   }
 
   public async register(email: string, password: string, username: string) {
-    // const response = await this.request<TokensResponse>(
-    //   PATHS.REGISTER,
-    //   TokensResponseSchema,
-    //   {
-    //     method: 'POST',
-    //     data: { email, password, username },
-    //   },
-    //   true,
-    // );
-
-    const expires = new Date();
-
-    expires.setMinutes(expires.getMinutes() + 5);
-
-    const response = {
-      success: true,
-      data: {
-        access_token: '123',
-        access_expires: expires.getTime(),
+    const response = await this.request<TokensResponse>(
+      PATHS.REGISTER,
+      TokensResponseSchema,
+      {
+        method: 'POST',
+        data: { email, password, username },
       },
-    };
+      true,
+    );
 
     if (response.success) {
       this.token = response.data.access_token;
@@ -66,13 +55,17 @@ export class AuthoredApi extends Api {
     }
   }
 
-  public async login(email: string, password: string) {
+  public async login(dto: LoginDto) {
+    const password = dto.password;
+    const username = dto.username;
+    const email = dto.email;
+
     const response = await this.request<TokensResponse>(
       PATHS.LOGIN,
       TokensResponseSchema,
       {
         method: 'POST',
-        data: { email, password },
+        data: { email, password, username },
       },
       true,
     );
@@ -108,10 +101,6 @@ export class AuthoredApi extends Api {
         };
       }
     }
-
-    // eslint-disable-next-line
-    // @ts-ignore
-    console.log(this.axios.getUri(config));
 
     return super.request<T>(path, zodSchema, config);
   }

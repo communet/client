@@ -1,3 +1,5 @@
+import type { LoginDto } from '@/shared/api/authored/dto';
+import { EmailValidator } from '@/shared/validators/user-data.validators';
 import { useSignInFormModel } from '@/widgets/auth-form/model/sign-in-form.model';
 import { useSignUpFormModel } from '@/widgets/auth-form/model/sign-up-form.model';
 import { AuthoredApi } from '@shared/api/authored/authored.api';
@@ -11,7 +13,18 @@ export const useSignInModel = () => {
 
   const signIn = async (message: MessageApi) => {
     try {
-      await authApi.login(formModel.model.value.emailOrUsername, formModel.model.value.password);
+      const emailValidatorResult = await EmailValidator.safeParseAsync(
+        formModel.model.value.emailOrUsername,
+      );
+      const credentials: LoginDto = { password: formModel.model.value.password };
+
+      if (emailValidatorResult.success) {
+        credentials.email = emailValidatorResult.data;
+      } else {
+        credentials.username = formModel.model.value.emailOrUsername;
+      }
+
+      await authApi.login(credentials);
     } catch (err) {
       if (err instanceof ServerError) {
         message.error(err.message);

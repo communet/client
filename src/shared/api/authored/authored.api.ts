@@ -1,9 +1,9 @@
-import { type SafeParseReturnType, type ZodSchema } from 'zod';
-import { Api } from '@shared/api/base.api';
 import type { LogoutResponse, TokensResponse } from '@shared/api/authored/schemas/dtos';
 import { LogoutResponseSchema, TokensResponseSchema } from '@shared/api/authored/schemas/dtos';
-import { Service } from 'typedi';
+import { Api } from '@shared/api/base.api';
 import type { AxiosRequestConfig } from 'axios';
+import { Service } from 'typedi';
+import { type SafeParseReturnType, type ZodSchema } from 'zod';
 
 const PATHS = {
   REFRESH_TOKENS: 'auth/refresh',
@@ -24,16 +24,32 @@ export class AuthoredApi extends Api {
     super();
   }
 
+  public get isLoggedIn() {
+    return this.token && this.expiresAt && Date.now() < this.expiresAt;
+  }
+
   public async register(email: string, password: string, username: string) {
-    const response = await this.request<TokensResponse>(
-      PATHS.REGISTER,
-      TokensResponseSchema,
-      {
-        method: 'POST',
-        data: { email, password, username },
+    // const response = await this.request<TokensResponse>(
+    //   PATHS.REGISTER,
+    //   TokensResponseSchema,
+    //   {
+    //     method: 'POST',
+    //     data: { email, password, username },
+    //   },
+    //   true,
+    // );
+
+    const expires = new Date();
+
+    expires.setMinutes(expires.getMinutes() + 5);
+
+    const response = {
+      success: true,
+      data: {
+        access_token: '123',
+        access_expires: expires.getTime(),
       },
-      true,
-    );
+    };
 
     if (response.success) {
       this.token = response.data.access_token;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSignUpModel } from '@/widgets/auth-form/model';
 import { NButton, NFlex, NForm, NFormItem, NInput, useMessage } from 'naive-ui';
+import { useRouter } from 'vue-router';
 
 const message = useMessage();
 const {
@@ -8,15 +9,17 @@ const {
   handlePasswordEnter,
   signUp,
 } = useSignUpModel();
+const router = useRouter();
 
 const onSingUpButtonClick = async () => {
   const validationResult = await formRef.value?.validate();
 
-  if (validationResult) {
+  if (validationResult?.warnings) {
     return;
   }
 
   await signUp(message);
+  router.replace({ name: 'home' });
 };
 </script>
 

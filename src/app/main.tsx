@@ -13,8 +13,7 @@ const queryClient = new QueryClient();
 // For tanstack query devtools
 declare global {
   interface Window {
-    __TANSTACK_QUERY_CLIENT__:
-      import("@tanstack/query-core").QueryClient;
+    __TANSTACK_QUERY_CLIENT__: import('@tanstack/query-core').QueryClient;
   }
 }
 
@@ -23,19 +22,19 @@ window.__TANSTACK_QUERY_CLIENT__ = queryClient;
 
 declare module '@tanstack/react-router' {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
 
 const rootElement = document.getElementById('root');
 
 if (rootElement && !rootElement?.innerHTML) {
-  const root = createRoot(rootElement)
+  const root = createRoot(rootElement);
   root.render(
     <QueryClientProvider client={queryClient}>
       <StrictMode>
         <RouterProvider router={router} />
       </StrictMode>
-    </QueryClientProvider>
-  )
+    </QueryClientProvider>,
+  );
 }

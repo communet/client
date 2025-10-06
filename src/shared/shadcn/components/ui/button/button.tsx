@@ -1,9 +1,10 @@
-import { Slot } from "@radix-ui/react-slot"
-import { type VariantProps } from "class-variance-authority"
-import * as React from "react"
+import { Slot } from '@radix-ui/react-slot';
+import { type VariantProps } from 'class-variance-authority';
+import * as React from 'react';
 
-import { cn } from "../../../lib"
-import { getButtonVariants } from "./utils"
+import { cn } from '../../../lib';
+
+import { getButtonVariants } from './utils';
 
 export function Button({
   className,
@@ -11,11 +12,11 @@ export function Button({
   size,
   asChild = false,
   ...props
-}: React.ComponentProps<"button"> &
+}: React.ComponentProps<'button'> &
   VariantProps<typeof getButtonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : "button"
+    asChild?: boolean;
+  }): React.JSX.Element {
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp
@@ -23,5 +24,5 @@ export function Button({
       className={cn(getButtonVariants({ variant, size, className }))}
       {...props}
     />
-  )
+  );
 }

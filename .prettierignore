@@ -1,0 +1,2 @@
+# Ignore static generated files
+src/app/router/route-tree.gen.ts

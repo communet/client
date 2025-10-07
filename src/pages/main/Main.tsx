@@ -7,8 +7,8 @@ import type { FC } from 'react';
 
 export const MainPage: FC = () => {
   const query = useQuery({
-    queryKey: ['getUserById'],
-    queryFn: () => api.user.getById('123'),
+    queryKey: ['getMe'],
+    queryFn: () => api.user.getMe(),
   });
 
   return (

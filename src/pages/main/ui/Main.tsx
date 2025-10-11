@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 
-import { api, Button, Spinner } from '../../shared';
+import { api } from '../../../shared/api';
+import { Button, Spinner } from '../../../shared/shadcn';
 
 import type { FC } from 'react';
 

@@ -9,5 +9,5 @@ export const ResponseErrorSchema = z.object({
 
 export const ResponseOkSchema = z.object({
   error: z.literal(false),
-  data: z.any(),
+  data: z.unknown(),
 });

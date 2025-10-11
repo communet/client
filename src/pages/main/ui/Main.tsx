@@ -1,8 +1,8 @@
+import { Button } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 
 import { api } from '../../../shared/api';
-import { Button, Spinner } from '../../../shared/lib/shadcn';
 
 import type { FC } from 'react';
 
@@ -14,22 +14,20 @@ export const MainPage: FC = () => {
 
   return (
     <div>
-      <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
-        main page
-      </h1>
+      <h1>main page</h1>
 
-      <Button>
-        <Link to="/about">About</Link>
+      <Button component={Link} to="/about">
+        About
       </Button>
 
-      <Button variant={query.data?.error ? 'destructive' : 'default'}>
-        {!query.data && <Spinner />}
-
-        {query.data
-          ? !query.data.error
-            ? `User(${query.data.data.id}): ${query.data.data.username}`
-            : query.data.reason.join('/')
-          : 'Loading...'}
+      <Button
+        color={query.data?.error ? 'red' : 'green'}
+        variant="default"
+        loading={!query.data}
+      >
+        {query.data && !query.data.error
+          ? `User(${query.data.data.id}): ${query.data.data.username}`
+          : query.data?.reason.join('/')}
       </Button>
     </div>
   );

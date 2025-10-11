@@ -1,6 +1,4 @@
-import path from 'path';
-
-import tailwindcss from '@tailwindcss/vite';
+// eslint-disable-next-line import/no-unresolved
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
@@ -15,11 +13,5 @@ export default defineConfig({
       routesDirectory: './src/app/router/routes',
     }),
     react(),
-    tailwindcss(),
   ],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
 });

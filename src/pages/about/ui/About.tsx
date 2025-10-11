@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 
-import { Button } from '../../shared';
+import { Button } from '../../../shared/shadcn';
 
 import type { FC } from 'react';
 

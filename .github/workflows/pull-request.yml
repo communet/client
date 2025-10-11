@@ -1,0 +1,27 @@
+name: Static checks
+
+on:
+  push:
+    branches: ["dev"]
+  pull_request:
+    branches: ["dev"]
+
+jobs:
+  lint-typecheck-architecture:
+    name: Check Lint and Format Rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - name: Check Linting
+        run: npm run check:lint
+      - name: Check Formatting
+        run: npm run check:format
+      - name: Check Types
+        run: npm run check:types
+      - name: Check Architecture
+        run: npm run check:architecture

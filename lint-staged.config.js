@@ -6,6 +6,7 @@ export default {
       `npm run check:format ${stagedFilesString}`,
       `npm run check:lint ${stagedFilesString}`,
       'npm run check:types',
+      'npm run check:architecture',
     ];
   }
 }

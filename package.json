@@ -12,6 +12,7 @@
     "check:lint": "eslint \"src/**/*.{ts,tsx}\"",
     "check:lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "check:types": "tsc --noEmit",
+    "check:architecture": "true",
     "prepare": "husky"
   },
   "dependencies": {

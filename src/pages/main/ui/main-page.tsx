@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 
 import { api } from '../../../shared/api';
+import { AppLeftSidebar } from '../../../widgets/app-left-sidebar';
 
 import type { FC } from 'react';
 
@@ -13,7 +14,7 @@ export const MainPage: FC = () => {
   });
 
   return (
-    <div>
+    <AppLeftSidebar>
       <h1>main page</h1>
 
       <Button component={Link} to="/about">
@@ -29,6 +30,6 @@ export const MainPage: FC = () => {
           ? `User(${query.data.data.id}): ${query.data.data.username}`
           : query.data?.reason.join('/')}
       </Button>
-    </div>
+    </AppLeftSidebar>
   );
 };

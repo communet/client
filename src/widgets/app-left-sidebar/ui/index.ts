@@ -1,1 +1,1 @@
-export { AppLeftSidebar } from './app-left-sidebar';
+export { AppLeftSidebar, CHANNEL_PAGE } from './app-left-sidebar';

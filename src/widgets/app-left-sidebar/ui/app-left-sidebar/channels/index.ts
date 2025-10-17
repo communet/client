@@ -1,2 +1,2 @@
 // NOTE: залог на entity
-export { ChannelList } from './components';
+export { CHANNEL_PAGE, ChannelList } from './components';

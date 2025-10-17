@@ -1,15 +1,14 @@
-import { Group } from '@mantine/core';
-
 import { AppLeftSidebar } from '../../../widgets/app-left-sidebar';
+
+import { ChatSidebar } from './chat-sidebar';
 
 import type { FC } from 'react';
 import type { ChannelPageProps } from './types';
 
 export const ChannelPage: FC<ChannelPageProps> = ({ channelId }) => (
   <AppLeftSidebar>
-    <Group gap="md">
-      <div>Chat sidebar</div>
+    <ChatSidebar chatId={'123'}>
       <div>Channel {channelId} Content</div>
-    </Group>
+    </ChatSidebar>
   </AppLeftSidebar>
 );

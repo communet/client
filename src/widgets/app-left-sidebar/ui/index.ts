@@ -1,1 +1,2 @@
-export { AppLeftSidebar, CHANNEL_PAGE } from './app-left-sidebar';
+export { AppLeftSidebar } from './app-left-sidebar';
+export { CHANNEL_PAGE } from './channel-avatar';

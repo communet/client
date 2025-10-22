@@ -1,14 +1,5 @@
-import type { ChatModel } from './chat.model';
+import type { ChatListProps } from '../chat-list';
 
-export type ChatItemProps = {
-  chat: ChatModel;
-  isActive: boolean;
-};
-
-export type ChatListProps = {
-  chatId: string;
-};
-
-export type ChatSidebarProps = React.PropsWithChildren<{
-  chatId: string;
-}>;
+export type ChatSidebarProps = React.PropsWithChildren<
+  Pick<ChatListProps, 'chatId'>
+>;

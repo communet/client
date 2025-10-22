@@ -1,7 +1,7 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
-import { api } from '../../../../../../shared/api';
-import { ChannelModel } from '../channel-model';
+import { api } from '../../../shared/api';
+import { ChannelModel } from '../model';
 
 export const useChannelList = (): UseQueryResult<ChannelModel[]> =>
   useQuery({

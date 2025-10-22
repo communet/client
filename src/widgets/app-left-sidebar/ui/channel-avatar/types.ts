@@ -1,4 +1,4 @@
-import type { ChannelModel } from '../../channel-model';
+import type { ChannelModel } from '../../model';
 
 export type ChannelAvatarProps = {
   channel: ChannelModel;

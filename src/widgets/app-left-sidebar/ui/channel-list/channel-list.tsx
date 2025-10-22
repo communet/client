@@ -1,4 +1,4 @@
-import { useChannelList } from '../../channel-api';
+import { useChannelList } from '../../api';
 import { ChannelAvatar } from '../channel-avatar';
 
 import type { FC } from 'react';

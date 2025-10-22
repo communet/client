@@ -1,6 +1,4 @@
-import { ChatModel } from './chat.model';
-
-export const CHAT_PAGE = 'chats';
+import { ChatModel } from '../../model';
 
 export const MOCK_CHATS = [
   new ChatModel(

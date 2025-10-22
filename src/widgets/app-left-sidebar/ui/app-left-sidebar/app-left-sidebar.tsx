@@ -1,7 +1,8 @@
 import { Group, ScrollArea, Stack } from '@mantine/core';
 import { useParams } from '@tanstack/react-router';
 
-import { ChannelList } from './channels';
+import { ChannelList } from '../channel-list';
+
 import styles from './styles.module.scss';
 
 import type { FC } from 'react';

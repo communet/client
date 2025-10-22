@@ -1,6 +1,6 @@
 import { Group, ScrollArea, Stack } from '@mantine/core';
 
-import { ChatList } from './chat-list';
+import { ChatList } from './../chat-list';
 import styles from './styles.module.scss';
 
 import type { FC } from 'react';

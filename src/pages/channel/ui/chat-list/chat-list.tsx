@@ -1,8 +1,8 @@
-import { ChatItem } from './chat-item';
+import { ChatItem } from './../chat-item';
 import { MOCK_CHATS } from './constants';
 
 import type { FC } from 'react';
-import type { ChatModel } from './chat.model';
+import type { ChatModel } from '../../model';
 import type { ChatListProps } from './types';
 
 export const ChatList: FC<ChatListProps> = ({ chatId }) => {

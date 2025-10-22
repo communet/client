@@ -1,1 +1,1 @@
-export { AppLeftSidebar } from './ui';
+export { AppLeftSidebar, CHANNEL_PAGE } from './ui';

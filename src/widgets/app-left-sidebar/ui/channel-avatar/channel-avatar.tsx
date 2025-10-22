@@ -14,6 +14,7 @@ export const ChannelAvatar: FC<ChannelAvatarProps> = ({
     <Avatar
       variant={isSelected ? 'filled' : 'light'}
       radius="md"
+      size="lg"
       color={isSelected ? 'cyan' : undefined}
       // TODO: сделать обёртку для проброса пропсов компонента извне
       component={Link}

@@ -9,6 +9,6 @@ export const ChatList: FC<ChatListProps> = ({ chatId }) => {
   const chats: ChatModel[] = MOCK_CHATS;
 
   return chats.map((chat) => (
-    <ChatItem chat={chat} isActive={chat.id === chatId} />
+    <ChatItem key={chat.id} chat={chat} isActive={chat.id === chatId} />
   ));
 };

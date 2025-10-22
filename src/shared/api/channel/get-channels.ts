@@ -1,7 +1,7 @@
 import { api } from '../axios';
 import { withValidation } from '../common';
 
-import { Channel } from './schemas';
+import { Channel } from './schema';
 
 export const getChannels = withValidation(Channel.array(), async () => {
   const response = await api.get(`/channels`);

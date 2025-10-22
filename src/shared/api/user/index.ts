@@ -1,7 +1,7 @@
 import { getMe } from './get-me';
-import { getUserById } from './get-user-by-id';
+import { getById } from './get-by-id';
 
 export const user = {
-  getById: getUserById,
+  getById,
   getMe,
 };

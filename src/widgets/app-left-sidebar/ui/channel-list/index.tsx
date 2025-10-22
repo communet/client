@@ -8,17 +8,14 @@ export const ChannelList: FC<ChannelListProps> = ({ selectedId, ...rest }) => {
   const channelListQuery = useChannelList();
 
   return (
-    channelListQuery.data && (
-      <>
-        {channelListQuery.data.map((channel) => (
-          <ChannelAvatar
-            key={channel.id}
-            channel={channel}
-            isSelected={selectedId === channel.id}
-            {...rest}
-          />
-        ))}
-      </>
-    )
+    channelListQuery.data &&
+    channelListQuery.data.map((channel) => (
+      <ChannelAvatar
+        key={channel.id}
+        channel={channel}
+        isSelected={selectedId === channel.id}
+        {...rest}
+      />
+    ))
   );
 };

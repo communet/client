@@ -7,7 +7,7 @@ import type { ChannelPageProps } from './types';
 
 export const ChannelPage: FC<ChannelPageProps> = ({ channelId }) => (
   <AppLeftSidebar>
-    <ChatSidebar chatId={'123'}>
+    <ChatSidebar chatId={'123'} channelId={channelId}>
       <div>Channel {channelId} Content</div>
     </ChatSidebar>
   </AppLeftSidebar>

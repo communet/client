@@ -1,5 +1,3 @@
 import type { ChatListProps } from '../chat-list';
 
-export type ChatSidebarProps = React.PropsWithChildren<
-  Pick<ChatListProps, 'chatId'>
->;
+export type ChatSidebarProps = React.PropsWithChildren<ChatListProps>;

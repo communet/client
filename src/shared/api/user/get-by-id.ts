@@ -1,9 +1,9 @@
 import { api } from '../axios';
 import { withValidation } from '../common';
 
-import { User } from './schemas';
+import { User } from './schema';
 
-export const getUserById = withValidation(User, async (id: string) => {
+export const getById = withValidation(User, async (id: string) => {
   const response = await api.get(`/users/${id}`);
 
   return response.data as unknown;

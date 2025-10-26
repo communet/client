@@ -19,6 +19,8 @@ jobs:
       - run: npm ci
       - name: Check Linting
         run: npm run check:lint
+      - name: Check Styles
+        run: npm run check:styles
       - name: Check Formatting
         run: npm run check:format
       - name: Check Types

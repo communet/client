@@ -6,7 +6,8 @@ export default {
       `npm run check:format ${stagedFilesString}`,
       `npm run check:lint ${stagedFilesString}`,
       'npm run check:types',
-      'npm run check:architecture',
     ];
-  }
+  },
+  'src/**/*.scss': (stagedFiles) => [`npm run check:styles ${stagedFiles.join(' ')}`],
+  'src/**/*.*': () => ['npm run check:architecture']
 }

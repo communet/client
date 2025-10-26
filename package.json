@@ -13,6 +13,7 @@
     "check:lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "check:types": "tsc --noEmit",
     "check:architecture": "steiger ./src",
+    "check:styles": "stylelint ./src/**/*.scss",
     "prepare": "husky"
   },
   "dependencies": {
@@ -52,6 +53,11 @@
     "postcss-simple-vars": "^7.0.1",
     "sass": "^1.93.2",
     "steiger": "^0.5.11",
+    "stylelint": "^16.25.0",
+    "stylelint-config-sass-guidelines": "^12.1.0",
+    "stylelint-config-standard-scss": "^16.0.0",
+    "stylelint-order": "^7.0.0",
+    "stylelint-prettier": "^5.0.3",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
     "vite": "^7.0.4"

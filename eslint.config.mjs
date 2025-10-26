@@ -38,10 +38,17 @@ export default tseslint.config([
       'prettier/prettier': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
+      "@typescript-eslint/no-misused-promises": [
+        "error",
+        {
+          "checksVoidReturn": {
+            "attributes": false
+          }
+        }
+      ],
       '@typescript-eslint/no-unsafe-argument': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
       'import/no-absolute-path': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'class-methods-use-this': 'error',

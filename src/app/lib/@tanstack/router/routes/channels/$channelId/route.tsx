@@ -1,12 +1,12 @@
 import { createFileRoute, useParams } from '@tanstack/react-router';
 
-import { ChannelPage } from '../../../../../pages/channel';
+import { ChannelPage } from '../../../../../../../pages/channel';
 
 const RouteComponent = (): React.ReactNode => {
-  const { channelId } = useParams({ strict: false });
+  const { channelId, chatId } = useParams({ strict: false });
 
   if (channelId) {
-    return <ChannelPage channelId={channelId} />;
+    return <ChannelPage channelId={channelId} chatId={chatId} />;
   }
 
   return <div>Channel not found</div>;

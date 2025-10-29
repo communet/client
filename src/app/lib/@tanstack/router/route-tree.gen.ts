@@ -11,7 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ChannelsChannelIdRouteImport } from './routes/channels.$channelId'
+import { Route as ChannelsChannelIdRouteRouteImport } from './routes/channels/$channelId/route'
+import { Route as ChannelsChannelIdChatsChatIdRouteImport } from './routes/channels/$channelId/chats/$chatId'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -23,40 +24,62 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChannelsChannelIdRoute = ChannelsChannelIdRouteImport.update({
+const ChannelsChannelIdRouteRoute = ChannelsChannelIdRouteRouteImport.update({
   id: '/channels/$channelId',
   path: '/channels/$channelId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChannelsChannelIdChatsChatIdRoute =
+  ChannelsChannelIdChatsChatIdRouteImport.update({
+    id: '/chats/$chatId',
+    path: '/chats/$chatId',
+    getParentRoute: () => ChannelsChannelIdRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/channels/$channelId': typeof ChannelsChannelIdRoute
+  '/channels/$channelId': typeof ChannelsChannelIdRouteRouteWithChildren
+  '/channels/$channelId/chats/$chatId': typeof ChannelsChannelIdChatsChatIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/channels/$channelId': typeof ChannelsChannelIdRoute
+  '/channels/$channelId': typeof ChannelsChannelIdRouteRouteWithChildren
+  '/channels/$channelId/chats/$chatId': typeof ChannelsChannelIdChatsChatIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/channels/$channelId': typeof ChannelsChannelIdRoute
+  '/channels/$channelId': typeof ChannelsChannelIdRouteRouteWithChildren
+  '/channels/$channelId/chats/$chatId': typeof ChannelsChannelIdChatsChatIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/channels/$channelId'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/channels/$channelId'
+    | '/channels/$channelId/chats/$chatId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/channels/$channelId'
-  id: '__root__' | '/' | '/about' | '/channels/$channelId'
+  to:
+    | '/'
+    | '/about'
+    | '/channels/$channelId'
+    | '/channels/$channelId/chats/$chatId'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/channels/$channelId'
+    | '/channels/$channelId/chats/$chatId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  ChannelsChannelIdRoute: typeof ChannelsChannelIdRoute
+  ChannelsChannelIdRouteRoute: typeof ChannelsChannelIdRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -79,16 +102,37 @@ declare module '@tanstack/react-router' {
       id: '/channels/$channelId'
       path: '/channels/$channelId'
       fullPath: '/channels/$channelId'
-      preLoaderRoute: typeof ChannelsChannelIdRouteImport
+      preLoaderRoute: typeof ChannelsChannelIdRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/channels/$channelId/chats/$chatId': {
+      id: '/channels/$channelId/chats/$chatId'
+      path: '/chats/$chatId'
+      fullPath: '/channels/$channelId/chats/$chatId'
+      preLoaderRoute: typeof ChannelsChannelIdChatsChatIdRouteImport
+      parentRoute: typeof ChannelsChannelIdRouteRoute
     }
   }
 }
 
+interface ChannelsChannelIdRouteRouteChildren {
+  ChannelsChannelIdChatsChatIdRoute: typeof ChannelsChannelIdChatsChatIdRoute
+}
+
+const ChannelsChannelIdRouteRouteChildren: ChannelsChannelIdRouteRouteChildren =
+  {
+    ChannelsChannelIdChatsChatIdRoute: ChannelsChannelIdChatsChatIdRoute,
+  }
+
+const ChannelsChannelIdRouteRouteWithChildren =
+  ChannelsChannelIdRouteRoute._addFileChildren(
+    ChannelsChannelIdRouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  ChannelsChannelIdRoute: ChannelsChannelIdRoute,
+  ChannelsChannelIdRouteRoute: ChannelsChannelIdRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

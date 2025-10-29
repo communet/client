@@ -1,4 +1,4 @@
 export type ChatListProps = {
-  chatId: string;
+  chatId?: string;
   channelId: string;
 };

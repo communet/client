@@ -1,5 +1,6 @@
 import { channel } from './channel';
-import { chats } from './chats';
+import { chat } from './chat';
 import { user } from './user';
+import { message } from './message';
 
-export const api = { user, channel, chats };
+export const api = { user, channel, chat, message };

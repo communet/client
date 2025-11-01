@@ -7,7 +7,7 @@ export const useChatList = (channelId: string): UseQueryResult<ChatModel[]> =>
   useQuery({
     queryKey: ['chat-list', channelId],
     queryFn: async () => {
-      const chats = await api.chats.getChats(channelId);
+      const chats = await api.chat.getChats(channelId);
 
       if (chats.error) {
         // TODO: Придумать более удачный способ перехвата ошибки

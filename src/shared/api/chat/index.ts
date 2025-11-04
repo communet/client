@@ -1,9 +1,9 @@
 import { create } from './create';
-import { getChannels } from './get-channels';
+import { getChats } from './get-chats';
 import { update } from './update';
 
-export const channel = {
-  getChannels,
+export const chat = {
+  getChats,
   create,
   update,
 };

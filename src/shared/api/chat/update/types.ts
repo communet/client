@@ -1,4 +1,4 @@
-export type UpdateChatParams = {
+export type UpdateChatPayload = {
   channelId: string;
   chatId: string;
   name: string;

@@ -8,8 +8,8 @@ import type { FC } from 'react';
 import type { ChatSidebarProps } from './types';
 
 export const ChatSidebar: FC<ChatSidebarProps> = ({ children, ...rest }) => (
-  <Group h="100%" mah="100%" gap="md" align="flex-start">
-    <ScrollArea className={styles['app-chat-sidebar']} w="350px">
+  <Group className={styles['app-chat-sidebar__wrapper']}>
+    <ScrollArea className={styles['app-chat-sidebar']}>
       <Stack gap="xs">
         <ChatList {...rest} />
 

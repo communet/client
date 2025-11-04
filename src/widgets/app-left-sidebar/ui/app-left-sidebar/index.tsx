@@ -15,7 +15,7 @@ export const AppLeftSidebar: FC<AppLeftSidebarProps> = ({
   const { channelId } = useParams({ strict: false });
 
   return (
-    <Group h="100%" mah="100%" gap="md" align="flex-start">
+    <Group className={styles['app-left-sidebar__wrapper']}>
       <ScrollArea className={styles['app-left-sidebar']}>
         <Stack gap="md">
           <ChannelList selectedId={channelId} />

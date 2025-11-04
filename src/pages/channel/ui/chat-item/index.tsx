@@ -16,7 +16,7 @@ export const ChatItem: FC<ChatItemProps> = ({ chat, isActive }) => (
       size="md"
       fullWidth
       component={Link}
-      to={`${CHANNEL_PAGE}/${chat.channelId}/${CHAT_PAGE}/${chat.id}`}
+      to={`/${CHANNEL_PAGE}/${chat.channelId}/${CHAT_PAGE}/${chat.id}`}
     >
       <Text truncate="end">{chat.name}</Text>
     </Button>

@@ -1,5 +1,5 @@
 import { Box, Flex, Stack, TextInput } from '@mantine/core';
-import { useState, type FC } from 'react';
+import { useCallback, useState, type FC } from 'react';
 
 import { MessageList } from '../message-list';
 
@@ -10,10 +10,14 @@ import type { ChatPageProps } from './types';
 export const ChatPage: FC<ChatPageProps> = ({ chatId, channelId }) => {
   const [value, setValue] = useState('');
 
-  const sendMessage = (e: React.FormEvent): void => {
-    e.preventDefault();
-    // TODO: отправить сообщение
-  };
+  const sendMessage = useCallback(
+    (e: React.FormEvent): void => {
+      e.preventDefault();
+      console.log(value);
+      // TODO: отправить сообщение
+    },
+    [value],
+  );
 
   // TODO: добавить нормальное отображение переносов строк в поле ввода
   return (

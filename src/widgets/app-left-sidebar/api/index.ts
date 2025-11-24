@@ -3,9 +3,11 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { api } from '../../../shared/api';
 import { ChannelModel } from '../model';
 
+import { CHANNEL_LIST_QUERY_KEY } from './constants';
+
 export const useChannelList = (): UseQueryResult<ChannelModel[]> =>
   useQuery({
-    queryKey: ['channel-list'],
+    queryKey: [CHANNEL_LIST_QUERY_KEY],
     queryFn: async () => {
       const channels = await api.channel.getChannels();
 

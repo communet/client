@@ -17,7 +17,16 @@
     overflow: hidden;
   }
 
+  &__message-input-wrapper {
+    flex-grow: 1;
+  }
+
   &__message-input {
     background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
+  }
+
+  &__message-form {
+    display: flex;
+    gap: var(--mantine-spacing-md);
   }
 }

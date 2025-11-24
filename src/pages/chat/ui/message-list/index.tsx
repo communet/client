@@ -25,28 +25,24 @@ export const MessageList: FC<MessageListProps> = ({
 }: MessageListProps) => {
   const scrollViewport = useRef<HTMLDivElement>(null);
   const messages = useMessageList(channelId, chatId);
-  const isScrollTriggeredOnce = useRef(false);
+
+  const scrollBottom = (behavior: ScrollBehavior): void => {
+    scrollViewport.current?.scrollTo({
+      top: scrollViewport.current.scrollHeight,
+      behavior,
+    });
+  };
 
   useEffect(() => {
-    if (!scrollViewport.current || isScrollTriggeredOnce.current) {
+    if (!scrollViewport.current || messages.isPending) {
       return;
     }
 
-    scrollViewport.current?.scrollTo({
-      top: scrollViewport.current.scrollHeight,
-      behavior: 'smooth',
-    });
-
-    isScrollTriggeredOnce.current = true;
-  });
+    scrollBottom('smooth');
+  }, [chatId, messages.isPending]);
 
   useImperativeHandle(ref, () => ({
-    scrollToBottom: (): void => {
-      scrollViewport.current?.scrollTo({
-        top: scrollViewport.current.scrollHeight,
-        behavior: 'smooth',
-      });
-    },
+    scrollToBottom: (): void => scrollBottom('smooth'),
   }));
 
   if (messages.isLoading) {

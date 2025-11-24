@@ -1,6 +1,9 @@
 .message-item {
   padding: 5px 12px;
   border-radius: var(--mantine-radius-md);
+  color: var(--mantine-color-gray-4);
+  
+  cursor: pointer;
 
   &:hover {
     background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));

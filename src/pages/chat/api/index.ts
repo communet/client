@@ -9,7 +9,7 @@ import {
 import { api } from '../../../shared/api';
 import { MessageModel } from '../model';
 
-const MESSAGE_LIST_QUERY_KEY = 'message-list';
+import { MESSAGE_LIST_QUERY_KEY } from './constants';
 
 export const useMessageList = (
   channelId: string,
@@ -49,22 +49,14 @@ export const useMessageSend = (
     mutationKey: ['message-send', channelId, chatId],
     onSuccess: (response) => {
       if (!response.error) {
+        const { id, content, chatId, senderId, createdAt } = response.data;
+
         queryClient.setQueryData(
           [MESSAGE_LIST_QUERY_KEY, channelId, chatId],
-          (old: MessageModel[]) => {
-            if (old) {
-              return [
-                ...old,
-                new MessageModel(
-                  response.data.id,
-                  response.data.content,
-                  response.data.chatId,
-                  response.data.senderId,
-                  response.data.createdAt,
-                ),
-              ];
-            }
-          },
+          (old: MessageModel[]) => [
+            ...old,
+            new MessageModel(id, content, chatId, senderId, createdAt),
+          ],
         );
       }
     },

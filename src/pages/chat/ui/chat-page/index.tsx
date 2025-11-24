@@ -1,61 +1,60 @@
-import { Box, Button, Flex, Stack, TextInput } from '@mantine/core';
-import { useState, type FC } from 'react';
+import { Box, Button, Group, Stack, Textarea } from '@mantine/core';
+import { useRef, type FC } from 'react';
 
 import { MessageList } from '../message-list';
 import { useMessageSend } from '../../api';
 
 import styles from './styles.module.scss';
+import { useMessageInputControl } from './hooks';
 
 import type { ChatPageProps } from './types';
 
 export const ChatPage: FC<ChatPageProps> = ({ chatId, channelId }) => {
-  const [value, setValue] = useState('');
+  const messageListRef = useRef<{ scrollToBottom: () => void }>(null);
   const sendMutation = useMessageSend(channelId, chatId);
-
-  const sendMessage = (e: React.FormEvent): void => {
-    if (!value) {
-      return;
-    }
-
-    e.preventDefault();
-
-    sendMutation.mutate(value);
-
-    setValue('');
+  const submit = (content: string): void => {
+    sendMutation.mutate(content, {
+      onSuccess: () =>
+        setTimeout(() => messageListRef.current?.scrollToBottom(), 0),
+    });
   };
+
+  const { value, ...controls } = useMessageInputControl(submit);
 
   // TODO: добавить нормальное отображение переносов строк в поле ввода
   return (
-    <Flex className={styles['app-chat__wrapper']}>
-      <Stack className={styles['app-chat']}>
-        <Box className={styles['app-chat__message-list']}>
-          <MessageList channelId={channelId} chatId={chatId} />
-        </Box>
-        <form
-          className={styles['app-chat__message-form']}
-          onSubmit={sendMessage}
-        >
-          <TextInput
-            className={styles['app-chat__message-input-wrapper']}
-            classNames={{
-              input: styles['app-chat__message-input'],
-            }}
-            value={value}
-            onChange={(e) => setValue(e.currentTarget.value)}
-            placeholder="Сообщение..."
-            radius="md"
-          />
+    <Stack className={styles['app-chat__wrapper']}>
+      <Box className={styles['app-chat__message-list']}>
+        <MessageList
+          ref={messageListRef}
+          channelId={channelId}
+          chatId={chatId}
+        />
+      </Box>
 
-          <Button
-            type="submit"
-            radius="md"
-            color="cyan"
-            loading={sendMutation.isPending}
-          >
-            Отправить
-          </Button>
-        </form>
-      </Stack>
-    </Flex>
+      <Group gap="md" align="flex-end">
+        <Textarea
+          className={styles['app-chat__message-input-wrapper']}
+          classNames={{
+            input: styles['app-chat__message-input'],
+          }}
+          autosize
+          maxRows={4}
+          value={value}
+          placeholder="Сообщение..."
+          radius="md"
+          {...controls}
+        />
+
+        <Button
+          radius="md"
+          color="cyan"
+          loading={sendMutation.isPending}
+          onClick={() => submit(value)}
+        >
+          Отправить
+        </Button>
+      </Group>
+    </Stack>
   );
 };

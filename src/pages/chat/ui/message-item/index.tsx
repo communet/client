@@ -1,4 +1,4 @@
-import { Text, UnstyledButton } from '@mantine/core';
+import { Text } from '@mantine/core';
 
 import styles from './styles.module.scss';
 
@@ -12,13 +12,5 @@ export type MessageItemProps = {
 export const MessageItem: FC<MessageItemProps> = ({
   message,
 }: MessageItemProps) => {
-  return (
-    <UnstyledButton
-      className={styles['message-item']}
-      variant="subtle"
-      color="gray"
-    >
-      <Text>{message.content}</Text>
-    </UnstyledButton>
-  );
+  return <Text className={styles['message-item']}>{message.content}</Text>;
 };

@@ -1,9 +1,23 @@
 .app-chat {
   width: 100%;
-  height: 100%;
-  padding: 12px;
-  border-radius: var(--mantine-radius-lg);
-  overflow: hidden;
 
-  background-color: var(--mantine-color-default);
+  &__wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    border-radius: var(--mantine-radius-lg);
+    overflow: hidden;
+
+    background-color: var(--mantine-color-default);
+  }
+
+  &__message-list {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  &__message-input {
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
+  }
 }

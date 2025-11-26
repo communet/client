@@ -6,11 +6,15 @@ import {
   type ModalProps,
   type TextInputProps,
 } from '@mantine/core';
-import { useState, type FC } from 'react';
+import { useEffect, useRef, useState, type FC } from 'react';
 
-export type ModalPromptProps = Omit<ModalProps, 'children' | 'onSubmit'> &
+export type ModalPromptProps = Omit<
+  ModalProps,
+  'children' | 'onSubmit' | 'defaultValue'
+> &
   Pick<TextInputProps, 'placeholder' | 'label'> & {
     submitLabel?: string;
+    defaultValue?: string;
     onSubmit: (value: string) => void | Promise<void>;
   };
 
@@ -21,11 +25,20 @@ export const ModalPrompt: FC<ModalPromptProps> = ({
   placeholder,
   title,
   submitLabel,
+  defaultValue,
+  opened,
   ...props
 }) => {
+  const previousOpenedState = useRef(opened);
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (defaultValue && !previousOpenedState.current && opened) {
+      setValue(defaultValue);
+    }
+  }, [defaultValue, opened]);
 
   const onFormSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -71,7 +84,7 @@ export const ModalPrompt: FC<ModalPromptProps> = ({
   };
 
   return (
-    <Modal.Root {...props} onClose={onModalRootClose}>
+    <Modal.Root opened={opened} {...props} onClose={onModalRootClose}>
       <Modal.Overlay />
       <Modal.Content>
         <Modal.Header>

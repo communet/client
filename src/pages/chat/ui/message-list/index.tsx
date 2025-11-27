@@ -38,7 +38,7 @@ export const MessageList: FC<MessageListProps> = ({
       return;
     }
 
-    scrollBottom('smooth');
+    scrollBottom('instant');
   }, [chatId, messages.isPending]);
 
   useImperativeHandle(ref, () => ({
@@ -46,7 +46,7 @@ export const MessageList: FC<MessageListProps> = ({
   }));
 
   if (messages.isLoading) {
-    return <Loader color="cyan" size="md" />;
+    return <Loader className={styles.loader} color="cyan" size="md" />;
   }
 
   return (

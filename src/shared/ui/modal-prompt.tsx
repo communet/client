@@ -24,7 +24,7 @@ export const ModalPrompt: FC<ModalPromptProps> = ({
   label,
   placeholder,
   title,
-  submitLabel,
+  submitLabel = 'Сохранить',
   defaultValue,
   opened,
   ...props
@@ -85,7 +85,7 @@ export const ModalPrompt: FC<ModalPromptProps> = ({
 
   return (
     <Modal.Root opened={opened} {...props} onClose={onModalRootClose}>
-      <Modal.Overlay />
+      <Modal.Overlay blur={3} backgroundOpacity={0.55} />
       <Modal.Content>
         <Modal.Header>
           <Modal.Title component="div">{title}</Modal.Title>
@@ -104,7 +104,7 @@ export const ModalPrompt: FC<ModalPromptProps> = ({
             />
 
             <Button loading={isLoading} type="submit">
-              {submitLabel || 'Сохранить'}
+              {submitLabel}
             </Button>
           </Stack>
         </Modal.Body>

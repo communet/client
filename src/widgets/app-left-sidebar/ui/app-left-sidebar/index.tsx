@@ -1,20 +1,24 @@
 import { Button, Group, ScrollArea, Stack, Title } from '@mantine/core';
-import { useParams } from '@tanstack/react-router';
+import { useParams, useRouter } from '@tanstack/react-router';
 import { IconPlus } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { useQueryClient } from '@tanstack/react-query';
-import { useState, type FC } from 'react';
+import { useRef, type FC } from 'react';
 
 import { ChannelList } from '../channel-list';
-import { ModalPrompt } from '../../../../shared/ui';
-import { api } from '../../../../shared/api';
-import { CHANNEL_LIST_QUERY_KEY } from '../../api/constants';
+import { ModalConfirm, ModalPrompt } from '../../../../shared/ui';
 import { ChannelModel } from '../../model';
+import {
+  useChannelList,
+  useCreateChannel,
+  useDeleteChannel,
+  useUpdateChannel,
+} from '../../api';
 
 import styles from './styles.module.scss';
 
 import type { AppLeftSidebarProps } from './types';
 
+// TODO: вынести по отдельным хукам все действия с каналами
 export const AppLeftSidebar: FC<AppLeftSidebarProps> = ({
   activeChannelId: _activeChannelId,
   children,
@@ -25,65 +29,84 @@ export const AppLeftSidebar: FC<AppLeftSidebarProps> = ({
     isUpdateChannelModalOpen,
     { open: openUpdateChannelModal, close: closeUpdateChannelModal },
   ] = useDisclosure();
+  const [
+    isDeleteChannelModalOpen,
+    { open: openDeleteChannelModal, close: closeDeleteChannelModal },
+  ] = useDisclosure();
+  const selectedOnDeletionChannel = useRef<ChannelModel | null>(null);
+  const selectedOnUpdateChannel = useRef<ChannelModel | null>(null);
 
-  const [updateModalValue, setUpdateModalValue] = useState<ChannelModel>();
+  const handleOpenDeleteChannelModal = (channel: ChannelModel): void => {
+    selectedOnDeletionChannel.current = channel;
+    openDeleteChannelModal();
+  };
+
+  const handleCloseDeleteChannelModal = (): void => {
+    closeDeleteChannelModal();
+    selectedOnDeletionChannel.current = null;
+  };
+
   const handleOpenUpdateChannelModal = (channel: ChannelModel): void => {
-    setUpdateModalValue(channel);
+    selectedOnUpdateChannel.current = channel;
     openUpdateChannelModal();
   };
 
   const handleCloseUpdateChannelModal = (): void => {
     closeUpdateChannelModal();
-    setUpdateModalValue(undefined);
+    selectedOnUpdateChannel.current = null;
   };
 
-  const clientQuery = useQueryClient();
+  const updateChannelMutation = useUpdateChannel();
+  const createChannelMutation = useCreateChannel();
+  const deleteChannelMutation = useDeleteChannel();
+  const channelList = useChannelList();
+  const router = useRouter();
 
-  const onSubmit = async (value: string): Promise<void> => {
+  const handleCreateChannel = async (value: string): Promise<void> => {
     if (!value) {
       return;
     }
 
-    const response = await api.channel.create(value);
+    const result = await createChannelMutation.mutateAsync(value);
 
-    if (!response.error) {
-      clientQuery.setQueryData(
-        [CHANNEL_LIST_QUERY_KEY],
-        (channels: ChannelModel[]) => [
-          ...channels,
-          new ChannelModel(
-            response.data.id,
-            response.data.name,
-            response.data.creatorId,
-          ),
-        ],
-      );
+    if (!result.error) {
+      await router.navigate({
+        to: `/channels/$channelId`,
+        params: { channelId: result.data.id },
+      });
     }
   };
 
-  const onUpdateChannel = async (value: string): Promise<void> => {
-    if (!value || !updateModalValue) {
+  const handleUpdateChannel = async (value: string): Promise<void> => {
+    if (!value || !selectedOnUpdateChannel.current) {
       return;
     }
 
-    const response = await api.channel.update(updateModalValue.id, value);
+    await updateChannelMutation.mutateAsync({
+      id: selectedOnUpdateChannel.current.id,
+      name: value,
+    });
+  };
 
-    if (!response.error) {
-      clientQuery.setQueryData(
-        [CHANNEL_LIST_QUERY_KEY],
-        (channels: ChannelModel[]) =>
-          channels.map((channel) => {
-            if (channel.id === response.data.id) {
-              return new ChannelModel(
-                response.data.id,
-                response.data.name,
-                response.data.creatorId,
-              );
-            }
+  const handleDeleteChannel = async (): Promise<void> => {
+    if (!selectedOnDeletionChannel.current) {
+      return;
+    }
 
-            return channel;
-          }),
-      );
+    const result = await deleteChannelMutation.mutateAsync(
+      selectedOnDeletionChannel.current.id,
+    );
+
+    if (!result.error) {
+      if (channelList.data?.length) {
+        await router.navigate({
+          replace: true,
+          to: `/channels/$channelId`,
+          params: { channelId: channelList.data[0].id },
+        });
+      } else {
+        await router.navigate({ to: '/', replace: true });
+      }
     }
   };
 
@@ -97,19 +120,30 @@ export const AppLeftSidebar: FC<AppLeftSidebarProps> = ({
         placeholder="Введите название канала"
         submitLabel="Создать"
         onClose={close}
-        onSubmit={onSubmit}
+        onSubmit={handleCreateChannel}
       />
 
       <ModalPrompt
         centered
-        opened={isUpdateChannelModalOpen && !!updateModalValue}
+        opened={isUpdateChannelModalOpen && !!selectedOnUpdateChannel.current}
         title={<Title order={2}>Редактировать канал</Title>}
         label="Название канала"
         placeholder="Введите название канала"
         submitLabel="Сохранить"
-        defaultValue={updateModalValue?.name}
+        defaultValue={selectedOnUpdateChannel.current?.name}
         onClose={handleCloseUpdateChannelModal}
-        onSubmit={onUpdateChannel}
+        onSubmit={handleUpdateChannel}
+      />
+
+      <ModalConfirm
+        centered
+        opened={isDeleteChannelModalOpen}
+        title={<Title order={2}>Удалить канал</Title>}
+        description="Вы действительно хотите удалить канал?"
+        acceptLabel="Удалить"
+        declineLabel="Отменить"
+        onClose={handleCloseDeleteChannelModal}
+        onAccept={handleDeleteChannel}
       />
 
       <ScrollArea className={styles['app-left-sidebar']}>
@@ -117,6 +151,7 @@ export const AppLeftSidebar: FC<AppLeftSidebarProps> = ({
           <ChannelList
             selectedId={channelId}
             onUpdate={handleOpenUpdateChannelModal}
+            onDelete={handleOpenDeleteChannelModal}
           />
 
           <Button

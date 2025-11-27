@@ -1,4 +1,9 @@
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  type UseMutationResult,
+  type UseQueryResult,
+} from '@tanstack/react-query';
 
 import { api } from '../../../shared/api';
 import { ChannelModel } from '../model';
@@ -21,4 +26,125 @@ export const useChannelList = (): UseQueryResult<ChannelModel[]> =>
       );
     },
     staleTime: Infinity,
+  });
+
+export const useCreateChannel = (): UseMutationResult<
+  | {
+      error: true;
+      reason: string[];
+      code: string;
+    }
+  | {
+      error: false;
+      data: {
+        id: string;
+        name: string;
+        creatorId: string;
+      };
+    },
+  Error,
+  string,
+  unknown
+> =>
+  useMutation({
+    mutationFn: api.channel.create,
+    mutationKey: ['channel-create'],
+    onSuccess: (response, __, _, context) => {
+      if (response.error) {
+        // TODO: Придумать более удачный способ перехвата ошибки
+        throw new Error(response.reason.join('\n'));
+      }
+
+      context.client.setQueriesData(
+        { queryKey: [CHANNEL_LIST_QUERY_KEY] },
+        (channels: ChannelModel[]) => [
+          ...channels,
+          new ChannelModel(
+            response.data.id,
+            response.data.name,
+            response.data.creatorId,
+          ),
+        ],
+      );
+    },
+  });
+
+export const useUpdateChannel = (): UseMutationResult<
+  | {
+      error: true;
+      reason: string[];
+      code: string;
+    }
+  | {
+      error: false;
+      data: {
+        id: string;
+        name: string;
+        creatorId: string;
+      };
+    },
+  Error,
+  {
+    id: string;
+    name: string;
+  },
+  unknown
+> =>
+  useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) =>
+      api.channel.update(id, name),
+    mutationKey: ['channel-update'],
+    onSuccess: (response, __, _, context) => {
+      if (response.error) {
+        // TODO: Придумать более удачный способ перехвата ошибки
+        throw new Error(response.reason.join('\n'));
+      }
+
+      context.client.setQueriesData(
+        { queryKey: [CHANNEL_LIST_QUERY_KEY] },
+        (channels: ChannelModel[]) =>
+          channels.map((channel) => {
+            if (channel.id === response.data.id) {
+              return new ChannelModel(
+                response.data.id,
+                response.data.name,
+                response.data.creatorId,
+              );
+            }
+
+            return channel;
+          }),
+      );
+    },
+  });
+
+export const useDeleteChannel = (): UseMutationResult<
+  | {
+      error: true;
+      reason: string[];
+      code: string;
+    }
+  | {
+      error: false;
+      data: void;
+    },
+  Error,
+  string,
+  unknown
+> =>
+  useMutation({
+    mutationFn: api.channel.delete,
+    mutationKey: ['channel-delete'],
+    onSuccess: (response, id, _, context) => {
+      if (response.error) {
+        // TODO: Придумать более удачный способ перехвата ошибки
+        throw new Error(response.reason.join('\n'));
+      }
+
+      context.client.setQueriesData(
+        { queryKey: [CHANNEL_LIST_QUERY_KEY] },
+        (channels: ChannelModel[]) =>
+          channels.filter((channel) => channel.id !== id),
+      );
+    },
   });

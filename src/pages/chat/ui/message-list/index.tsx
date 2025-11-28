@@ -11,6 +11,9 @@ import { useMessageList } from '../../api';
 import { MessageItem } from '../message-item';
 
 import styles from './styles.module.scss';
+import { MAX_MESSAGE_TIME_GAP } from './constants';
+
+import type { MessageModel } from '../../model';
 
 export type MessageListProps = {
   channelId: string;
@@ -49,6 +52,18 @@ export const MessageList: FC<MessageListProps> = ({
     return <Loader className={styles.loader} color="cyan" size="md" />;
   }
 
+  const isSameMessageGroup = (
+    message: MessageModel,
+    prevMessage?: MessageModel,
+  ) => {
+    return (
+      prevMessage &&
+      message.senderId === prevMessage.senderId &&
+      message.createdAt.getTime() - prevMessage.createdAt.getTime() <
+        MAX_MESSAGE_TIME_GAP
+    );
+  };
+
   return (
     <ScrollArea
       viewportRef={scrollViewport}
@@ -58,14 +73,16 @@ export const MessageList: FC<MessageListProps> = ({
       <Stack align="stretch" gap="0">
         {messages.data &&
           messages.data.map((message, index, messages) => {
-            const isSameAuthor =
-              index > 0 && message.senderId === messages[index - 1].senderId;
+            const isSameGroup = isSameMessageGroup(
+              message,
+              index == 0 ? undefined : messages[index - 1],
+            );
 
             return (
               <Box key={message.id}>
-                {!isSameAuthor && index > 0 && <Space h="lg" />}
+                {!isSameGroup && index > 0 && <Space h="lg" />}
 
-                <MessageItem message={message} isAvatarShown={!isSameAuthor} />
+                <MessageItem message={message} isAvatarShown={!isSameGroup} />
               </Box>
             );
           })}

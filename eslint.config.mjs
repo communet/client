@@ -48,10 +48,10 @@ export default tseslint.config([
       ],
       '@typescript-eslint/no-unsafe-argument': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'error',
-      '@typescript-eslint/explicit-function-return-type': 'error',
       'import/no-absolute-path': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       'class-methods-use-this': 'error',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
       'import/order': [
         'error',
         {

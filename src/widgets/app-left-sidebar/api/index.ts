@@ -1,16 +1,11 @@
-import {
-  useMutation,
-  useQuery,
-  type UseMutationResult,
-  type UseQueryResult,
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { api } from '../../../shared/api';
 import { ChannelModel } from '../model';
 
 import { CHANNEL_LIST_QUERY_KEY } from './constants';
 
-export const useChannelList = (): UseQueryResult<ChannelModel[]> =>
+export const useChannelList = () =>
   useQuery({
     queryKey: [CHANNEL_LIST_QUERY_KEY],
     queryFn: async () => {
@@ -28,24 +23,7 @@ export const useChannelList = (): UseQueryResult<ChannelModel[]> =>
     staleTime: Infinity,
   });
 
-export const useCreateChannel = (): UseMutationResult<
-  | {
-      error: true;
-      reason: string[];
-      code: string;
-    }
-  | {
-      error: false;
-      data: {
-        id: string;
-        name: string;
-        creatorId: string;
-      };
-    },
-  Error,
-  string,
-  unknown
-> =>
+export const useCreateChannel = () =>
   useMutation({
     mutationFn: api.channel.create,
     mutationKey: ['channel-create'],
@@ -69,27 +47,7 @@ export const useCreateChannel = (): UseMutationResult<
     },
   });
 
-export const useUpdateChannel = (): UseMutationResult<
-  | {
-      error: true;
-      reason: string[];
-      code: string;
-    }
-  | {
-      error: false;
-      data: {
-        id: string;
-        name: string;
-        creatorId: string;
-      };
-    },
-  Error,
-  {
-    id: string;
-    name: string;
-  },
-  unknown
-> =>
+export const useUpdateChannel = () =>
   useMutation({
     mutationFn: ({ id, name }: { id: string; name: string }) =>
       api.channel.update(id, name),
@@ -118,20 +76,7 @@ export const useUpdateChannel = (): UseMutationResult<
     },
   });
 
-export const useDeleteChannel = (): UseMutationResult<
-  | {
-      error: true;
-      reason: string[];
-      code: string;
-    }
-  | {
-      error: false;
-      data: void;
-    },
-  Error,
-  string,
-  unknown
-> =>
+export const useDeleteChannel = () =>
   useMutation({
     mutationFn: api.channel.delete,
     mutationKey: ['channel-delete'],

@@ -34,6 +34,7 @@ export const ChatPage: FC<ChatPageProps> = ({ chatId, channelId }) => {
 
       <Group gap="md" align="flex-end">
         <Textarea
+          size="md"
           className={styles['app-chat__message-input-wrapper']}
           classNames={{
             input: styles['app-chat__message-input'],
@@ -47,6 +48,7 @@ export const ChatPage: FC<ChatPageProps> = ({ chatId, channelId }) => {
         />
 
         <Button
+          size="md"
           radius="md"
           color="cyan"
           loading={sendMutation.isPending}

@@ -1,4 +1,4 @@
-import { Loader, ScrollArea, Stack } from '@mantine/core';
+import { Box, Loader, ScrollArea, Space, Stack } from '@mantine/core';
 import {
   useEffect,
   useImperativeHandle,
@@ -55,11 +55,20 @@ export const MessageList: FC<MessageListProps> = ({
       offsetScrollbars
       className={styles['message-list']}
     >
-      <Stack align="stretch" gap="xs">
+      <Stack align="stretch" gap="0">
         {messages.data &&
-          messages.data.map((message) => (
-            <MessageItem key={message.id} message={message} />
-          ))}
+          messages.data.map((message, index, messages) => {
+            const isSameAuthor =
+              index > 0 && message.senderId === messages[index - 1].senderId;
+
+            return (
+              <Box key={message.id}>
+                {!isSameAuthor && index > 0 && <Space h="lg" />}
+
+                <MessageItem message={message} isAvatarShown={!isSameAuthor} />
+              </Box>
+            );
+          })}
       </Stack>
     </ScrollArea>
   );

@@ -1,5 +1,11 @@
+.message-item-wrapper {
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
 .message-item {
-  padding: 5px 12px;
+  width: 100%;
+  padding: 8px 16px;
   border-radius: var(--mantine-radius-md);
   color: var(--mantine-color-gray-4);
   

@@ -2,7 +2,6 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-  type UseMutationResult,
   type UseQueryResult,
 } from '@tanstack/react-query';
 
@@ -33,14 +32,7 @@ export const useMessageList = (
     staleTime: Infinity,
   });
 
-export const useMessageSend = (
-  channelId: string,
-  chatId: string,
-): UseMutationResult<
-  Awaited<ReturnType<typeof api.message.create>>,
-  Error,
-  string
-> => {
+export const useMessageSend = (channelId: string, chatId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({

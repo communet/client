@@ -5,5 +5,5 @@ export const Message = z.object({
   content: z.string(),
   senderId: z.string(),
   chatId: z.string(),
-  createdAt: z.date(),
+  createdAt: z.iso.datetime().transform((value) => new Date(value)),
 });

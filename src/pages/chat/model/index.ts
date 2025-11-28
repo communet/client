@@ -4,6 +4,6 @@ export class MessageModel {
     public content: string,
     public chatId: string,
     public senderId: string,
-    public createdAt: string,
+    public createdAt: Date,
   ) {}
 }

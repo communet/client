@@ -71,7 +71,7 @@ export const ModalConfirm: FC<ModalConfirmProps> = ({
   return (
     <Modal.Root opened={opened} {...props} onClose={onModalRootClose}>
       <Modal.Overlay blur={3} backgroundOpacity={0.55} />
-      <Modal.Content>
+      <Modal.Content radius="lg" p="xs">
         <Modal.Header>
           <Modal.Title component="div">{title}</Modal.Title>
           <Modal.CloseButton disabled={isLoading} />

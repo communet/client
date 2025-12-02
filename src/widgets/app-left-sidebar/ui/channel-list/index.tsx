@@ -27,6 +27,7 @@ export const ChannelList: FC<ChannelListProps> = ({
     channelListQuery.data &&
     channelListQuery.data.map((channel) => (
       <ContextMenu
+        // NOTE: constant satisfies of type `ContextMenuItem[]` and cannot be `errored value`
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         items={CHANNEL_ITEM_CONTEXT_MENU_ITEMS}
         key={channel.id}

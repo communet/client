@@ -15,6 +15,7 @@ export const ChatItem: FC<ChatItemProps> = ({ chat, isActive }) => (
       color="gray"
       size="md"
       fullWidth
+      justify="flex-start"
       component={Link}
       to={`/${CHANNEL_PAGE}/${chat.channelId}/${CHAT_PAGE}/${chat.id}`}
     >

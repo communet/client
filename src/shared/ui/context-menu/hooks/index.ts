@@ -1,10 +1,6 @@
 import { useDisclosure } from '@mantine/hooks';
 
-export const useChannelMenu = (): {
-  isOpen: boolean;
-  handleContextMenu: (e: React.MouseEvent) => void;
-  handleCloseMenu: () => void;
-} => {
+export const useContextMenu = () => {
   const [isOpen, { open, close }] = useDisclosure();
 
   const handleContextMenu = (e: React.MouseEvent): void => {

@@ -31,7 +31,7 @@ export const ChatList: FC<ChatListProps> = ({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         items={CHAT_ITEM_CONTEXT_MENU_ITEMS}
         key={chat.id}
-        onClick={(_, value) => valueToEventMap[value](chat)}
+        onClick={(_, value) => valueToEventMap[value]?.(chat)}
       >
         <ChatItem key={chat.id} chat={chat} isActive={chat.id === chatId} />
       </ContextMenu>

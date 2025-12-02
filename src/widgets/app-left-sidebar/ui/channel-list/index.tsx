@@ -31,7 +31,7 @@ export const ChannelList: FC<ChannelListProps> = ({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         items={CHANNEL_ITEM_CONTEXT_MENU_ITEMS}
         key={channel.id}
-        onClick={(_, value) => valueToEventMap[value]!(channel)}
+        onClick={(_, value) => valueToEventMap[value]?.(channel)}
       >
         <ChannelAvatar
           channel={channel}

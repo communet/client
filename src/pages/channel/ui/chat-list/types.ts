@@ -4,6 +4,6 @@ export type ChatListProps = {
   chatId?: string;
   channelId: string;
 
-  onDelete: (chat: ChatModel) => void;
-  onUpdate: (chat: ChatModel) => void;
+  onDelete?: (chat: ChatModel) => void;
+  onUpdate?: (chat: ChatModel) => void;
 };

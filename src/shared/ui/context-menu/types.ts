@@ -8,8 +8,11 @@ export type ContextMenuItem = {
   data?: unknown;
 } & MenuItemProps;
 
-export type ContextMenuProps<T extends ContextMenuItem> =
-  React.PropsWithChildren<{
-    items: T[];
-    onClick?: (e: React.MouseEvent, value: T['value'], data: T['data']) => void;
-  }>;
+export type ContextMenuProps = React.PropsWithChildren<{
+  items: ContextMenuItem[];
+  onClick?: (
+    e: React.MouseEvent,
+    value: ContextMenuItem['value'],
+    data: ContextMenuItem['data'],
+  ) => void;
+}>;

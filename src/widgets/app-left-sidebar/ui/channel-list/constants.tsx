@@ -2,7 +2,7 @@ import { IconPencil, IconTrash } from '@tabler/icons-react';
 
 import type { ContextMenuItem } from '../../../../shared/ui';
 
-export const CHANNEL_ITEM_CONTEXT_MENU_ITEMS = [
+export const CHANNEL_ITEM_CONTEXT_MENU_ITEMS: ContextMenuItem[] = [
   {
     icon: <IconPencil size={16} />,
     value: 'update',
@@ -14,4 +14,4 @@ export const CHANNEL_ITEM_CONTEXT_MENU_ITEMS = [
     value: 'delete',
     label: 'Удалить',
   },
-] as const satisfies ContextMenuItem[];
+];

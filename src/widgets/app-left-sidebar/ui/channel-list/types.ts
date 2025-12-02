@@ -6,3 +6,5 @@ export type ChannelListProps = {
   onDelete?: (id: ChannelModel) => void;
   onUpdate?: (id: ChannelModel) => void;
 };
+
+export type ChannelListContextMenuItemValue = 'delete' | 'update';

@@ -7,3 +7,5 @@ export type ChatListProps = {
   onDelete?: (chat: ChatModel) => void;
   onUpdate?: (chat: ChatModel) => void;
 };
+
+export type ChatListContextMenuItemValue = 'delete' | 'update';

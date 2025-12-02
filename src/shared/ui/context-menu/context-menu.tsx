@@ -4,11 +4,7 @@ import { useContextMenu } from './hooks';
 
 import type { ContextMenuItem, ContextMenuProps } from './types';
 
-export const ContextMenu = <T extends ContextMenuItem>({
-  items,
-  children,
-  onClick,
-}: ContextMenuProps<T>) => {
+export const ContextMenu = ({ items, children, onClick }: ContextMenuProps) => {
   const { isOpen, handleContextMenu, handleCloseMenu } = useContextMenu();
 
   const ContextMenuItem = ({

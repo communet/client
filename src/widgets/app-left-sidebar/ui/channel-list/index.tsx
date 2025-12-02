@@ -5,7 +5,10 @@ import { ContextMenu } from '../../../../shared/ui';
 import { CHANNEL_ITEM_CONTEXT_MENU_ITEMS } from './constants';
 
 import type { FC } from 'react';
-import type { ChannelListProps } from './types';
+import type {
+  ChannelListContextMenuItemValue,
+  ChannelListProps,
+} from './types';
 
 export const ChannelList: FC<ChannelListProps> = ({
   selectedId,
@@ -16,28 +19,22 @@ export const ChannelList: FC<ChannelListProps> = ({
   const channelListQuery = useChannelList();
 
   const valueToEventMap: Record<
-    (typeof CHANNEL_ITEM_CONTEXT_MENU_ITEMS)[number]['value'],
+    ChannelListContextMenuItemValue,
     ChannelListProps['onDelete'] | ChannelListProps['onUpdate']
   > = {
     delete: onDelete,
     update: onUpdate,
   };
 
-  return (
-    channelListQuery.data &&
-    channelListQuery.data.map((channel) => (
-      <ContextMenu
-        // NOTE: constant satisfies of type `ContextMenuItem[]` and cannot be `errored value`
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        items={CHANNEL_ITEM_CONTEXT_MENU_ITEMS}
-        key={channel.id}
-        onClick={(_, value) => valueToEventMap[value]?.(channel)}
-      >
-        <ChannelAvatar
-          channel={channel}
-          isSelected={selectedId === channel.id}
-        />
-      </ContextMenu>
-    ))
-  );
+  return channelListQuery.data?.map((channel) => (
+    <ContextMenu
+      items={CHANNEL_ITEM_CONTEXT_MENU_ITEMS}
+      key={channel.id}
+      onClick={(_, value) =>
+        valueToEventMap[value as ChannelListContextMenuItemValue]?.(channel)
+      }
+    >
+      <ChannelAvatar channel={channel} isSelected={selectedId === channel.id} />
+    </ContextMenu>
+  ));
 };

@@ -12,17 +12,20 @@ export const useDeleteChatControls = (channelId: string) => {
   const deleteChatMutation = useDeleteChatMutation();
   const clientQuery = useQueryClient();
   const router = useRouter();
-  const [isDeleteChatModalOpen, { open, close }] = useDisclosure();
+  const [
+    isDeleteChatModalOpen,
+    { open: openDeleteChatModal, close: closeDeleteChatModal },
+  ] = useDisclosure();
   const selectedToDeleteChat = useRef<ChatModel | null>(null);
 
   const handleOpenDeleteChatModel = (chat: ChatModel) => {
     selectedToDeleteChat.current = chat;
-    open();
+    openDeleteChatModal();
   };
 
   const handleCloseDeleteChatModal = () => {
+    closeDeleteChatModal();
     selectedToDeleteChat.current = null;
-    close();
   };
 
   const handleDeleteChat = async () => {
@@ -57,6 +60,7 @@ export const useDeleteChatControls = (channelId: string) => {
 
   return {
     isDeleteChatModalOpen,
+    selectedToDeleteChat,
     handleOpenDeleteChatModel,
     handleCloseDeleteChatModal,
     handleDeleteChat,

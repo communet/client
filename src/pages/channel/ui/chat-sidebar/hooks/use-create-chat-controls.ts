@@ -8,7 +8,7 @@ export const useCreateChatControls = (channelId: string) => {
   const router = useRouter();
   const [
     isCreateChatModalOpen,
-    { open: openCreateChatModal, close: closeCreateChatModal },
+    { open: handleOpenCreateChatModal, close: handleCloseCreateChatModal },
   ] = useDisclosure();
 
   const handleCreateChat = async (value: string): Promise<void> => {
@@ -31,8 +31,8 @@ export const useCreateChatControls = (channelId: string) => {
 
   return {
     isCreateChatModalOpen,
-    openCreateChatModal,
-    closeCreateChatModal,
+    handleOpenCreateChatModal,
+    handleCloseCreateChatModal,
     handleCreateChat,
   };
 };

@@ -75,3 +75,37 @@ export const useDeleteChatMutation = () =>
       );
     },
   });
+
+export const useUpdateChatMutation = () =>
+  useMutation({
+    mutationFn: ({
+      chatId,
+      channelId,
+      name,
+    }: {
+      chatId: string;
+      channelId: string;
+      name: string;
+    }) => api.chat.update({ chatId, channelId, name }),
+    mutationKey: ['channel-update'],
+    onSuccess: (response, __, _, context) => {
+      if (response.error) {
+        // TODO: Придумать более удачный способ перехвата ошибки
+        throw new Error(response.reason.join('\n'));
+      }
+
+      context.client.setQueryData(
+        [CHAT_LIST_QUERY_KEY, response.data.channelId],
+        (chats: ChatModel[]) =>
+          chats.map((chat) =>
+            chat.id === response.data.id
+              ? new ChatModel(
+                  chat.id,
+                  response.data.name,
+                  response.data.channelId,
+                )
+              : chat,
+          ),
+      );
+    },
+  });

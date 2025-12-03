@@ -45,7 +45,7 @@ export const MessageList: FC<MessageListProps> = ({
   }, [chatId, messages.isPending]);
 
   useImperativeHandle(ref, () => ({
-    scrollToBottom: (): void => scrollBottom('smooth'),
+    scrollToBottom: () => scrollBottom('smooth'),
   }));
 
   if (messages.isLoading) {

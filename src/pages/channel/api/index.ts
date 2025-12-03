@@ -1,4 +1,8 @@
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  type UseQueryResult,
+} from '@tanstack/react-query';
 
 import { api } from '../../../shared/api';
 import { ChatModel } from '../model';
@@ -21,4 +25,29 @@ export const useChatList = (channelId: string): UseQueryResult<ChatModel[]> =>
       );
     },
     staleTime: Infinity,
+  });
+
+export const useCreateChatMutation = () =>
+  useMutation({
+    mutationFn: ({ channelId, name }: { channelId: string; name: string }) =>
+      api.chat.create(channelId, name),
+    mutationKey: ['create-chat'],
+    onSuccess: (response, __, _, context) => {
+      if (response.error) {
+        // TODO: Придумать более удачный способ перехвата ошибки
+        throw new Error(response.reason.join('\n'));
+      }
+
+      context.client.setQueryData(
+        [CHAT_LIST_QUERY_KEY, response.data.channelId],
+        (chats: ChatModel[]) => [
+          ...chats,
+          new ChatModel(
+            response.data.id,
+            response.data.name,
+            response.data.channelId,
+          ),
+        ],
+      );
+    },
   });

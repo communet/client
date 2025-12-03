@@ -1,15 +1,11 @@
 import { Button, Group, ScrollArea, Stack, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
-import { useDisclosure } from '@mantine/hooks';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { ModalPrompt } from '../../../../shared/ui';
-import { api } from '../../../../shared/api';
-import { ChatModel } from '../../model';
-import { CHAT_LIST_QUERY_KEY } from '../../api/constants';
 
 import { ChatList } from './../chat-list';
 import styles from './styles.module.scss';
+import { useCreateChatControls } from './hooks';
 
 import type { FC } from 'react';
 import type { ChatSidebarProps } from './types';
@@ -19,26 +15,12 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
   channelId,
   ...rest
 }) => {
-  const [isOpen, { open, close }] = useDisclosure();
-  const clientQuery = useQueryClient();
-
-  const onSubmit = async (value: string): Promise<void> => {
-    if (!value) {
-      return;
-    }
-
-    const result = await api.chat.create(channelId, value);
-
-    if (!result.error) {
-      clientQuery.setQueryData(
-        [CHAT_LIST_QUERY_KEY, channelId],
-        (chats: ChatModel[]) => [
-          ...chats,
-          new ChatModel(result.data.id, result.data.name, channelId),
-        ],
-      );
-    }
-  };
+  const {
+    isCreateChatModalOpen,
+    openCreateChatModal,
+    closeCreateChatModal,
+    handleCreateChat,
+  } = useCreateChatControls(channelId);
 
   return (
     <Group className={styles['app-chat-sidebar__wrapper']}>
@@ -48,9 +30,9 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
         label="Название чата"
         placeholder="Введите название"
         submitLabel="Создать"
-        opened={isOpen}
-        onClose={close}
-        onSubmit={onSubmit}
+        opened={isCreateChatModalOpen}
+        onClose={closeCreateChatModal}
+        onSubmit={handleCreateChat}
       />
 
       <ScrollArea className={styles['app-chat-sidebar']}>
@@ -62,7 +44,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
             variant="light"
             color="cyan"
             leftSection={<IconPlus strokeLinecap="round" />}
-            onClick={open}
+            onClick={openCreateChatModal}
           >
             Новый чат
           </Button>

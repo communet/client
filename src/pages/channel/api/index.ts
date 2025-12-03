@@ -51,3 +51,27 @@ export const useCreateChatMutation = () =>
       );
     },
   });
+
+export const useDeleteChatMutation = () =>
+  useMutation({
+    mutationFn: ({
+      chatId,
+      channelId,
+    }: {
+      chatId: string;
+      channelId: string;
+    }) => api.chat.delete(channelId, chatId),
+    mutationKey: ['delete-chat'],
+    onSuccess: (response, variables, _, context) => {
+      if (response.error) {
+        // TODO: Придумать более удачный способ перехвата ошибки
+        throw new Error(response.reason.join('\n'));
+      }
+
+      context.client.setQueryData(
+        [CHAT_LIST_QUERY_KEY, variables.channelId],
+        (chats: ChatModel[]) =>
+          chats.filter((chat) => chat.id !== variables.chatId),
+      );
+    },
+  });

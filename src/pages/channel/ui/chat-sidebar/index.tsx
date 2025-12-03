@@ -1,11 +1,11 @@
 import { Button, Group, ScrollArea, Stack, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 
-import { ModalPrompt } from '../../../../shared/ui';
+import { ModalConfirm, ModalPrompt } from '../../../../shared/ui';
 
 import { ChatList } from './../chat-list';
 import styles from './styles.module.scss';
-import { useCreateChatControls } from './hooks';
+import { useCreateChatControls, useDeleteChatControls } from './hooks';
 
 import type { FC } from 'react';
 import type { ChatSidebarProps } from './types';
@@ -21,6 +21,12 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
     closeCreateChatModal,
     handleCreateChat,
   } = useCreateChatControls(channelId);
+  const {
+    isDeleteChatModalOpen,
+    handleOpenDeleteChatModel,
+    handleCloseDeleteChatModal,
+    handleDeleteChat,
+  } = useDeleteChatControls(channelId);
 
   return (
     <Group className={styles['app-chat-sidebar__wrapper']}>
@@ -35,9 +41,22 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
         onSubmit={handleCreateChat}
       />
 
+      <ModalConfirm
+        title={<Title order={2}>Удалить чат</Title>}
+        centered
+        description="Вы действительно хотите удалить чат?"
+        opened={isDeleteChatModalOpen}
+        onClose={handleCloseDeleteChatModal}
+        onAccept={handleDeleteChat}
+      />
+
       <ScrollArea className={styles['app-chat-sidebar']}>
         <Stack gap="xs">
-          <ChatList channelId={channelId} {...rest} />
+          <ChatList
+            {...rest}
+            onDelete={handleOpenDeleteChatModel}
+            channelId={channelId}
+          />
 
           <Button
             fullWidth

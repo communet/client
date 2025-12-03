@@ -1,4 +1,11 @@
-import { Button, Group, ScrollArea, Stack, Title } from '@mantine/core';
+import {
+  Button,
+  Group,
+  ScrollArea,
+  Stack,
+  Title,
+  Tooltip,
+} from '@mantine/core';
 import { useParams } from '@tanstack/react-router';
 import { IconPlus } from '@tabler/icons-react';
 import { type FC } from 'react';
@@ -85,18 +92,20 @@ export const AppLeftSidebar: FC<AppLeftSidebarProps> = ({
             onDelete={handleOpenDeleteChannelModal}
           />
 
-          <Button
-            classNames={{
-              root: styles['app-left-sidebar__create-channel-button'],
-            }}
-            size="lg"
-            variant="light"
-            color="cyan"
-            fullWidth
-            onClick={openCreateChannelModal}
-          >
-            <IconPlus />
-          </Button>
+          <Tooltip label="Создать канал" position="right">
+            <Button
+              classNames={{
+                root: styles['app-left-sidebar__create-channel-button'],
+              }}
+              size="lg"
+              variant="light"
+              color="cyan"
+              fullWidth
+              onClick={openCreateChannelModal}
+            >
+              <IconPlus />
+            </Button>
+          </Tooltip>
         </Stack>
       </ScrollArea>
 

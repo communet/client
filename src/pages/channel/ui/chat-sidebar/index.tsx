@@ -84,7 +84,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = ({
             fullWidth
             variant="light"
             color="cyan"
-            leftSection={<IconPlus strokeLinecap="round" />}
+            rightSection={<IconPlus strokeLinecap="round" />}
             onClick={handleOpenCreateChatModal}
           >
             Новый чат

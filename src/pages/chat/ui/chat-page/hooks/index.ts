@@ -4,8 +4,8 @@ export const useMessageInputControl = (
   onSubmit?: (content: string) => void,
 ): {
   value: string;
-  onKeyDown: (e: React.KeyboardEvent) => void;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onKeyDown: (e: KeyboardEvent) => void;
+  onChange: (content: string) => void;
 } => {
   const [value, setValue] = useState('');
 
@@ -13,8 +13,8 @@ export const useMessageInputControl = (
     setValue('');
   };
 
-  const onKeyDown = (e: React.KeyboardEvent): void => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+  const onKeyDown = (e: KeyboardEvent): void => {
+    if (e.key === 'Enter' && e.ctrlKey) {
       e.preventDefault();
 
       onSubmit?.(value);
@@ -23,8 +23,8 @@ export const useMessageInputControl = (
     }
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setValue(e.target.value);
+  const onChange = (content: string): void => {
+    setValue(content);
   };
 
   return {

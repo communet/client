@@ -23,18 +23,18 @@
   line-height: 1.5;
   align-self: center;
 
-  &__avatar-placeholder {
-    line-height: 1.5;
-  }
-
-  &__edit-input-wrapper {
+  &__editor {
     width: 100%;
-    flex-grow: 1;
+
     align-self: center;
   }
-  
-  &__edit-input {
+
+  &__editor.editing {
     background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
+  }
+
+  &__avatar-placeholder {
+    line-height: 1.5;
   }
 }
 

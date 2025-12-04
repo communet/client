@@ -38,25 +38,29 @@ export const useMessageUpdateControls = (
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
-      e.stopPropagation();
-      e.preventDefault();
-
       setIsEditing(false);
       setEditedMessage(message.content);
+
+      return true;
+    } else if (e.key === 'Enter' && e.ctrlKey) {
+      void handleSaveMessage();
+
+      return true;
     }
+
+    return false;
   };
 
-  const handleChangeMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditedMessage(e.target.value);
+  const handleChangeMessage = (content: string) => {
+    setEditedMessage(content);
   };
 
   return {
     isEditing,
     editedMessage,
     enableEditMode,
-    handleSaveMessage,
     handleKeyDown,
     handleChangeMessage,
   };

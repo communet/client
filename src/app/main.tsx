@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { withProviders } from './providers';
 
 import '@mantine/core/styles.css';
+import '@mantine/tiptap/styles.css';
 import './general.scss';
 
 const rootElement = document.getElementById('root');

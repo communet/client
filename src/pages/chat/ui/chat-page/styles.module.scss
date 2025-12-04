@@ -17,11 +17,8 @@
     overflow: hidden;
   }
 
-  &__message-input-wrapper {
-    flex-grow: 1;
-  }
-
   &__message-input {
+    flex-grow: 1;
     background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
   }
 

@@ -1,7 +1,8 @@
-import { Avatar, Group, Text, Textarea } from '@mantine/core';
+import { Avatar, Group } from '@mantine/core';
 
 import { ContextMenu } from '../../../../shared/ui';
 import { MessageModel } from '../../model';
+import { Editor } from '../editor';
 
 import styles from './styles.module.scss';
 import { MESSAGE_ITEM_CONTEXT_MENU_ITEMS } from './constants';
@@ -29,7 +30,6 @@ export const MessageItem: FC<MessageItemProps> = ({
     isEditing,
     editedMessage,
     enableEditMode,
-    handleSaveMessage,
     handleKeyDown,
     handleChangeMessage,
   } = useMessageUpdateControls(message, onUpdate ?? (() => {}));
@@ -54,6 +54,7 @@ export const MessageItem: FC<MessageItemProps> = ({
       <Group
         className={`${styles['message-item-wrapper']} ${isEditing ? styles.editing : ''}`}
         align="flex-start"
+        gap="8px"
       >
         <Avatar
           size="md"
@@ -66,27 +67,15 @@ export const MessageItem: FC<MessageItemProps> = ({
           }}
         />
 
-        {isEditing ? (
-          <Textarea
-            size="md"
-            className={styles['message-item__edit-input-wrapper']}
-            classNames={{
-              input: styles['message-item__edit-input'],
-            }}
-            autosize
-            autoFocus
-            value={editedMessage}
-            placeholder="Сообщение..."
-            radius="md"
-            onChange={handleChangeMessage}
-            onBlur={handleSaveMessage}
-            onKeyDown={handleKeyDown}
-          />
-        ) : (
-          <Text size="md" className={styles['message-item']}>
-            {message.content}
-          </Text>
-        )}
+        <Editor
+          classNames={{
+            root: `${isEditing ? styles.editing : ''} ${styles['message-item__editor']}`,
+          }}
+          content={editedMessage}
+          isReadOnly={!isEditing}
+          onChange={handleChangeMessage}
+          onKeyDown={handleKeyDown}
+        />
       </Group>
     </ContextMenu>
   );

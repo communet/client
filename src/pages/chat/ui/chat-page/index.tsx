@@ -1,8 +1,9 @@
-import { Box, Button, Group, Stack, Textarea } from '@mantine/core';
+import { Box, Button, Group, Stack } from '@mantine/core';
 import { useRef, type FC } from 'react';
 
 import { MessageList } from '../message-list';
 import { useMessageSend } from '../../api';
+import { Editor } from '../editor';
 
 import styles from './styles.module.scss';
 import { useMessageInputControl } from './hooks';
@@ -33,18 +34,13 @@ export const ChatPage: FC<ChatPageProps> = ({ chatId, channelId }) => {
       </Box>
 
       <Group gap="md" align="flex-end">
-        <Textarea
-          size="md"
-          className={styles['app-chat__message-input-wrapper']}
+        <Editor
           classNames={{
-            input: styles['app-chat__message-input'],
+            root: styles['app-chat__message-input'],
           }}
-          autosize
-          maxRows={4}
-          value={value}
-          placeholder="Сообщение..."
-          radius="md"
-          {...controls}
+          content={value}
+          onChange={controls.onChange}
+          onKeyDown={controls.onKeyDown}
         />
 
         <Button

@@ -21,6 +21,7 @@
 .message-item {
   width: 100%;
   line-height: 1.5;
+  align-self: center;
 
   &__avatar-placeholder {
     line-height: 1.5;
@@ -29,6 +30,7 @@
   &__edit-input-wrapper {
     width: 100%;
     flex-grow: 1;
+    align-self: center;
   }
   
   &__edit-input {

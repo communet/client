@@ -53,7 +53,7 @@ export const MessageItem: FC<MessageItemProps> = ({
     >
       <Group
         className={`${styles['message-item-wrapper']} ${isEditing ? styles.editing : ''}`}
-        align="center"
+        align="flex-start"
       >
         <Avatar
           size="md"

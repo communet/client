@@ -1,10 +1,15 @@
-import { Menu } from '@mantine/core';
+import { Box, Menu } from '@mantine/core';
 
 import { useContextMenu } from './hooks';
 
 import type { ContextMenuItem, ContextMenuProps } from './types';
 
-export const ContextMenu = ({ items, children, onClick }: ContextMenuProps) => {
+export const ContextMenu = ({
+  items,
+  children,
+  disabled,
+  onClick,
+}: ContextMenuProps) => {
   const { isOpen, handleContextMenu, handleCloseMenu } = useContextMenu();
 
   const ContextMenuItem = ({
@@ -58,10 +63,11 @@ export const ContextMenu = ({ items, children, onClick }: ContextMenuProps) => {
       withArrow
       closeOnClickOutside
       closeOnEscape
+      disabled={disabled}
       onClose={handleCloseMenu}
     >
       <Menu.Target>
-        <div onContextMenu={handleContextMenu}>{children}</div>
+        <Box onContextMenu={handleContextMenu}>{children}</Box>
       </Menu.Target>
 
       {items?.length && (

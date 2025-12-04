@@ -1,4 +1,4 @@
-import { Box, Loader, ScrollArea, Space, Stack } from '@mantine/core';
+import { Box, Loader, ScrollArea, Space, Stack, Title } from '@mantine/core';
 import {
   useEffect,
   useImperativeHandle,
@@ -7,11 +7,13 @@ import {
   type Ref,
 } from 'react';
 
-import { useMessageList } from '../../api';
+import { useMessageList, useMessageUpdate } from '../../api';
 import { MessageItem } from '../message-item';
+import { ModalConfirm } from '../../../../shared/ui';
 
 import styles from './styles.module.scss';
 import { MAX_MESSAGE_TIME_GAP } from './constants';
+import { useDeleteMessageControls } from './hooks';
 
 import type { MessageModel } from '../../model';
 
@@ -28,6 +30,14 @@ export const MessageList: FC<MessageListProps> = ({
 }: MessageListProps) => {
   const scrollViewport = useRef<HTMLDivElement>(null);
   const messages = useMessageList(channelId, chatId);
+  const messageUpdateMutation = useMessageUpdate(channelId, chatId);
+  const {
+    isDeleteMessageModalOpen,
+    messageToDelete,
+    handleCloseDeleteMessageModal,
+    handleDeleteMessage,
+    handleOpenDeleteMessageModal,
+  } = useDeleteMessageControls(channelId, chatId);
 
   const scrollBottom = (behavior: ScrollBehavior): void => {
     scrollViewport.current?.scrollTo({
@@ -64,12 +74,28 @@ export const MessageList: FC<MessageListProps> = ({
     );
   };
 
+  const handleUpdateMessage = async (message: MessageModel) => {
+    await messageUpdateMutation.mutateAsync({
+      messageId: message.id,
+      content: message.content,
+    });
+  };
+
   return (
     <ScrollArea
       viewportRef={scrollViewport}
       offsetScrollbars
       className={styles['message-list']}
     >
+      <ModalConfirm
+        title={<Title order={2}>Удалить сообщение</Title>}
+        centered
+        description="Вы действительно хотите удалить сообщение?"
+        opened={isDeleteMessageModalOpen && !!messageToDelete.current}
+        onClose={handleCloseDeleteMessageModal}
+        onAccept={handleDeleteMessage}
+      />
+
       <Stack align="stretch" gap="0">
         {messages.data &&
           messages.data.map((message, index, messages) => {
@@ -82,7 +108,12 @@ export const MessageList: FC<MessageListProps> = ({
               <Box key={message.id}>
                 {!isSameGroup && index > 0 && <Space h="lg" />}
 
-                <MessageItem message={message} isAvatarShown={!isSameGroup} />
+                <MessageItem
+                  message={message}
+                  isAvatarShown={!isSameGroup}
+                  onUpdate={handleUpdateMessage}
+                  onDelete={handleOpenDeleteMessageModal}
+                />
               </Box>
             );
           })}

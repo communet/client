@@ -26,11 +26,12 @@
     line-height: 1.5;
   }
 
-  &__message-input-wrapper {
+  &__edit-input-wrapper {
+    width: 100%;
     flex-grow: 1;
   }
   
-  &__message-input {
+  &__edit-input {
     background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
   }
 }

@@ -1,4 +1,4 @@
-import type { MenuItemProps } from '@mantine/core';
+import type { MenuItemProps, MenuProps } from '@mantine/core';
 
 export type ContextMenuItem = {
   value: string;
@@ -8,11 +8,13 @@ export type ContextMenuItem = {
   data?: unknown;
 } & MenuItemProps;
 
-export type ContextMenuProps = React.PropsWithChildren<{
-  items: ContextMenuItem[];
-  onClick?: (
-    e: React.MouseEvent,
-    value: ContextMenuItem['value'],
-    data: ContextMenuItem['data'],
-  ) => void;
-}>;
+export type ContextMenuProps = React.PropsWithChildren<
+  {
+    items: ContextMenuItem[];
+    onClick?: (
+      e: React.MouseEvent,
+      value: ContextMenuItem['value'],
+      data: ContextMenuItem['data'],
+    ) => void;
+  } & Pick<MenuProps, 'disabled'>
+>;

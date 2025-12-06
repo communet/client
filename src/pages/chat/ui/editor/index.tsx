@@ -29,7 +29,9 @@ export const Editor: FC<EditorProps> = ({
   const editor = useEditor({
     shouldRerenderOnTransaction: true,
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        trailingNode: false,
+      }),
       Image.configure({
         allowBase64: true,
       }),
@@ -62,7 +64,6 @@ export const Editor: FC<EditorProps> = ({
         onPaste: (currentEditor, files, htmlContent) => {
           files.forEach((file) => {
             if (htmlContent) {
-              console.log(htmlContent);
               return false;
             }
 
